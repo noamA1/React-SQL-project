@@ -1,7 +1,7 @@
 import express from "express";
 import vacationsBl from "../business-logic/vacations-bl.js";
 import generalSetting from "../common/config.js";
-import { checkResultStatus } from "../common/helper.js";
+import { checkResultStatus, upload } from "../common/helper.js";
 
 const vacationsRouter = express.Router();
 
@@ -105,6 +105,14 @@ vacationsRouter.delete(
     } else {
       return res.send(deleteResult);
     }
+  }
+);
+
+vacationsRouter.post(
+  `${generalSetting.baseUrl}/vacations-image`,
+  upload.single("file"),
+  (req, res) => {
+    res.json({ url: "http://localhost:5000/image/" + upload.getFilename });
   }
 );
 

@@ -34,7 +34,7 @@ const getVacationById = async (vacationId) => {
 const getAllFollowers = async () => {
   try {
     let followersResult = await connection.promise()
-      .query(`SELECT vacationId, COUNT(userId) AS followers  FROM users_vacations
+      .query(`SELECT vacationId, userId, COUNT(userId) AS followers  FROM users_vacations
         GROUP BY vacationId`);
     vacationsResult.success = true;
     vacationsResult.data = followersResult[0];

@@ -22,8 +22,30 @@ const getAllVacations = async () => {
   return data;
 };
 
+const getVacationsFollowers = async () => {
+  const respone = await fetch(`http://localhost:5000/api/vacations-followers`);
+  const data = await respone.json();
+  return data;
+};
+
+const addFollower = async (userId, vacationId) => {
+  const preperdBody = {
+    user: userId,
+    vacation: vacationId,
+  };
+
+  const res = await fetch(`http://localhost:5000/api/vacations-followers`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(preperdBody),
+  });
+  const data = await res.json();
+  return data;
+};
+
 const sendImage = async (formData) => {
-  // console.log(form);
   const response = await fetch(`http://localhost:5000/api/vacations-image`, {
     method: "POST",
     body: formData,
@@ -37,4 +59,6 @@ export default {
   sendImage,
   addNewVacation,
   getAllVacations,
+  getVacationsFollowers,
+  addFollower,
 };

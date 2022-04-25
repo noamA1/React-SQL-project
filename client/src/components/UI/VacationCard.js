@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Card,
   CardActionArea,
@@ -8,10 +9,26 @@ import {
   Typography,
 } from "@mui/material";
 import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const VacationCard = (props) => {
   let { id, destination, description, image, price, startDate, endDate } =
     props.item;
+  const [vacationFollowers, setVacationFollowers] = useState({});
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const findFollowers = props.followers.find(
+      (userVacationObj) => userVacationObj.vacationId === id
+    );
+    if (!findFollowers) {
+      setVacationFollowers(0);
+    } else {
+      setVacationFollowers(findFollowers);
+    }
+  });
+
   if (
     image.includes("some") ||
     image.includes("image") ||
@@ -19,11 +36,10 @@ const VacationCard = (props) => {
   ) {
     image = "";
   }
+  console.log(vacationFollowers);
+  console.log(vacationFollowers.userId === user.userId);
   return (
-    // <>
-    //   <img src={require("../../assets/images.jpg")} />
-    // </>
-    <Card sx={{ maxWidth: 345 }}>
+    <Card key={`vacation-card-${id}`} sx={{ maxWidth: 345 }}>
       <CardActionArea>
         {image !== "" && (
           <CardMedia
@@ -33,7 +49,6 @@ const VacationCard = (props) => {
             alt='green iguana'
           />
         )}
-
         <CardContent>
           <Typography gutterBottom variant='h5' component='div'>
             {destination}
@@ -50,9 +65,18 @@ const VacationCard = (props) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button variant='outlined' startIcon={<ThumbUpRoundedIcon />}>
-          Follow
-        </Button>
+        <Badge color='secondary' badgeContent={vacationFollowers.followers}>
+          <Button
+            disabled={vacationFollowers.userId === user.userId}
+            variant='outlined'
+            startIcon={<ThumbUpRoundedIcon />}
+            onClick={() => {
+              props.addFollower(id);
+            }}
+          >
+            Follow
+          </Button>
+        </Badge>
       </CardActions>
     </Card>
   );

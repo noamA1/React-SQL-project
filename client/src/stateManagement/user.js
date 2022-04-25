@@ -3,6 +3,7 @@ const initialState = {
   isSignIn: false,
   fullName: "",
   userInfo: {},
+  userId: "",
 };
 export const userSlice = createSlice({
   name: "user",
@@ -16,6 +17,7 @@ export const userSlice = createSlice({
         email: action.payload.userInfo.email,
       };
       state.fullName = `${state.userInfo.firstName} ${state.userInfo.lastName}`;
+      state.userId = action.payload.userInfo.id;
     },
     signOut: () => initialState,
   },

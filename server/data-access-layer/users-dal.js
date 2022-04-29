@@ -1,4 +1,5 @@
 import connection from "../common/database.js";
+import CryptoJS from "crypto-js";
 
 let result = {
   success: false,
@@ -31,12 +32,17 @@ const getUserByEmail = async (userEmail) => {
 
 const addNewUser = async (newUser) => {
   try {
-    let resultPostFromDB = await connection.promise()
+    const cryptoPassword = CryptoJS.AES.encrypt(
+      newUser.password,
+      "secret key 123"
+    ).toString();
+
+    let resultPostToDB = await connection.promise()
       .query(`INSERT INTO users (firstName, lastName, email, password, role)
         VALUES
-         ('${newUser.firstName}','${newUser.lastName}','${newUser.email}','${newUser.password}','user')`);
+         ('${newUser.firstName}','${newUser.lastName}','${newUser.email}','${cryptoPassword}','user')`);
     result.success = true;
-    result.data = resultPostFromDB[0];
+    result.data = resultPostToDB[0];
   } catch (error) {
     result.success = false;
     result.data = error;

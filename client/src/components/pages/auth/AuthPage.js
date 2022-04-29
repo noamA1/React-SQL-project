@@ -10,14 +10,13 @@ const AuthPage = () => {
   const navigate = useNavigate();
 
   const logInHandler = async (email, pass) => {
-    const loginUser = await getUserData(email);
-    if (loginUser.lengh === 0) {
-      alert("Wrong email or password");
+    const loginUser = await getUserData(email, pass);
+
+    if (loginUser === "Invalid Credentials") {
+      console.log("faild");
     } else {
-      if (checkPassword(pass, loginUser[0].password)) {
-        dispatch(signIn({ userInfo: { ...loginUser[0] } }));
-        navigate("/home");
-      }
+      dispatch(signIn({ userInfo: { ...loginUser[0] } }));
+      navigate("/home");
     }
   };
 
@@ -25,18 +24,9 @@ const AuthPage = () => {
     postNewUser(newUser);
   };
 
-  const getUserData = async (email) => {
-    const userData = await getUser(email);
+  const getUserData = async (email, password) => {
+    const userData = await getUser(email, password);
     return userData;
-  };
-
-  const checkPassword = (enteredPassword, confirmPassword) => {
-    if (enteredPassword === confirmPassword) {
-      return true;
-    } else {
-      alert("Wrong email or password");
-      return false;
-    }
   };
 
   return (

@@ -1,7 +1,7 @@
 import Modal from "../UI/Modal.js";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import VacationsFunctions from "../../common/VacationsFunctions";
+import VacationsFunctions from "../../common/VacationsFunctions.js";
 import VacationCard from "../UI/VacationCard";
 
 const Vacations = (props) => {
@@ -43,6 +43,10 @@ const Vacations = (props) => {
     getVacationsList();
   };
 
+  const deleteVacationHandler = (vacationId) => {
+    VacationsFunctions.deleteVacation(vacationId);
+  };
+
   return (
     <>
       <h1>Vacations Page!</h1>
@@ -56,6 +60,7 @@ const Vacations = (props) => {
             addFollower={followEventHandler}
             usersVacations={vacationsFolowersList}
             onEdit={openFormModalHandler}
+            onDelete={deleteVacationHandler}
           />
         );
       })}

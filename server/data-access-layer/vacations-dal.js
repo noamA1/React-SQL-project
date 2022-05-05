@@ -109,9 +109,13 @@ const update = async (id, vacationToUpdate) => {
 
 const deleteVacation = async (vacationId) => {
   try {
+    let deleteFollowersResult = await connection
+      .promise()
+      .query(`DELETE FROM users_vacations WHERE vacationId = ${vacationId}`);
     let deleteResult = await connection
       .promise()
       .query(`DELETE FROM vacations WHERE id = ${vacationId}`);
+
     vacationsResult.success = true;
     vacationsResult.data = deleteResult[0];
   } catch (error) {

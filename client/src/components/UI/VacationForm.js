@@ -9,6 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import PhotoSizeSelectActualOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActualOutlined";
+
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 // import { LocalizationProvider } from "@date-io/moment/";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -186,7 +187,6 @@ const VacationForm = (props) => {
             <FormControl sx={{ m: 2, width: "100%" }} variant='outlined'>
               <InputLabel htmlFor='outlined-adornment-image'>Image</InputLabel>
               <>
-                {/* <Button > */}
                 <IconButton
                   onClick={handleClick}
                   sx={{ ":hover": { background: "none" } }}
@@ -194,7 +194,7 @@ const VacationForm = (props) => {
                   <PhotoSizeSelectActualOutlinedIcon />
                   Upload an image
                 </IconButton>
-                {/* </Button> */}
+
                 <input
                   type='file'
                   ref={hiddenFileInput}

@@ -7,17 +7,18 @@ import {
   CardContent,
   CardMedia,
   Fab,
+  IconButton,
   Typography,
 } from "@mui/material";
 import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const VacationCard = (props) => {
   let { id, destination, description, image, price, startDate, endDate } =
     props.item;
-  // const followersList = props.usersVacations;
   const [disabledButton, setDisabledButton] = useState(false);
   const [vacationFollowers, setVacationFollowers] = useState({});
   const user = useSelector((state) => state.user);
@@ -51,6 +52,9 @@ const VacationCard = (props) => {
     image = "";
   }
 
+  const deleteHandler = () => {
+    props.onDelete(id);
+  };
   return (
     <Card key={`vacation-card-${id}`} sx={{ maxWidth: 345 }}>
       <CardActionArea>
@@ -99,6 +103,9 @@ const VacationCard = (props) => {
         >
           Edit
         </Button>
+        <IconButton onClick={deleteHandler}>
+          <DeleteIcon />
+        </IconButton>
       </CardActions>
     </Card>
   );

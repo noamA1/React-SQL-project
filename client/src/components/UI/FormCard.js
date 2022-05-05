@@ -288,5 +288,3 @@ const FormCard = (props) => {
 };
 
 export default FormCard;
-
-// {!isLogin && onBlur={checkEmailHandler}}

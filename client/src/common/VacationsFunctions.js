@@ -86,6 +86,15 @@ const sendImage = async (formData) => {
   }
 };
 
+const deleteVacation = async (id) => {
+  const response = await fetch(`http://localhost:5000/api/vacations/${id}`, {
+    method: "DELETE",
+  });
+  if (response) {
+    console.log(response.statusText);
+  }
+};
+
 export default {
   sendImage,
   addNewVacation,
@@ -94,4 +103,5 @@ export default {
   getVacationsFollowersCount,
   updateVacation,
   addFollower,
+  deleteVacation,
 };

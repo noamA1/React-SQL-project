@@ -1,5 +1,6 @@
 import multer from "multer";
 import CryptoJS from "crypto-js";
+import generalSetting from "./config.js";
 
 export const checkResultStatus = (result) => {
   if (!result.success) {
@@ -11,12 +12,12 @@ export const checkResultStatus = (result) => {
 export const checkPassword = (enteredPassword, databasePassword) => {
   const enteredPasswordBytes = CryptoJS.AES.decrypt(
     enteredPassword,
-    "secret key 123"
+    generalSetting.CRYPTOJS_KEY
   );
 
   const databasePasswordBytes = CryptoJS.AES.decrypt(
     databasePassword,
-    "secret key 123"
+    generalSetting.CRYPTOJS_KEY
   );
 
   const originalEnteredPassword = enteredPasswordBytes.toString(

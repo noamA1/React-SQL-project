@@ -9,9 +9,18 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    signIn: (state, action) => {
-      state.isSignIn = !state.isSignIn;
+    updateInfo: (state, action) => {
       state.userInfo = {
+        id: action.payload.userInfo.id,
+        firstName: action.payload.userInfo.firstName,
+        lastName: action.payload.userInfo.lastName,
+        email: action.payload.userInfo.email,
+      };
+    },
+    signIn: (state, action) => {
+      state.isSignIn = true;
+      state.userInfo = {
+        id: action.payload.userInfo.id,
         firstName: action.payload.userInfo.firstName,
         lastName: action.payload.userInfo.lastName,
         email: action.payload.userInfo.email,
@@ -23,6 +32,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { signIn, signOut } = userSlice.actions;
+export const { signIn, signOut, updateInfo } = userSlice.actions;
 
 export default userSlice.reducer;

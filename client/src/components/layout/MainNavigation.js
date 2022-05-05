@@ -47,6 +47,7 @@ const MainNavigation = (props) => {
       dispatch(signOut());
       navigate("/auth");
     }
+    setAnchorElUser(null);
   };
 
   const navigateToHandler = (pageName) => {

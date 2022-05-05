@@ -1,5 +1,6 @@
 import connection from "../common/database.js";
 import CryptoJS from "crypto-js";
+import generalSetting from "../common/config.js";
 
 let result = {
   success: false,
@@ -34,7 +35,7 @@ const addNewUser = async (newUser) => {
   try {
     const cryptoPassword = CryptoJS.AES.encrypt(
       newUser.password,
-      "secret key 123"
+      generalSetting.CRYPTOJS_KEY
     ).toString();
 
     let resultPostToDB = await connection.promise()

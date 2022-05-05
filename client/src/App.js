@@ -10,7 +10,7 @@ import Vacations from "./components/pages/Vacations.js";
 
 function App() {
   const user = useSelector((state) => state.user);
-
+  console.log(user);
   return (
     <div className='App'>
       <header>

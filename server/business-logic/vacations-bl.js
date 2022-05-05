@@ -12,6 +12,10 @@ const getFollowers = () => {
   return vacationsDal.getAllFollowers();
 };
 
+const getNumOfVactoinsFollowers = () => {
+  return vacationsDal.getNumOfVactoinsFollowers();
+};
+
 const addVacation = (newVacationBody) => {
   return vacationsDal.anddNewVacation(newVacationBody);
 };
@@ -36,4 +40,5 @@ export default {
   getFollowers,
   addNewFollower,
   updateVacation,
+  getNumOfVactoinsFollowers,
 };

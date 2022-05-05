@@ -5,13 +5,12 @@ import { getUser, postNewUser } from "../../../stateManagement/userActions";
 import FormCard from "../../UI/FormCard";
 
 const AuthPage = () => {
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const logInHandler = async (email, pass) => {
     const loginUser = await getUserData(email, pass);
-
     if (loginUser === "Invalid Credentials") {
       console.log("faild");
     } else {

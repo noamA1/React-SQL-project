@@ -1,29 +1,18 @@
-import Modal from "../UI/Modal.js";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import VacationsFunctions from "../../common/VacationsFunctions.js";
 import VacationCard from "../UI/VacationCard";
 
 const Vacations = (props) => {
-  const [openModal, setOpenModal] = useState(false);
-  const [vacationForEdit, setVacationForEdit] = useState({});
+  const socket = props.socketObj;
   const [vacationsList, setVacationsList] = useState([]);
   const [vacationsFolowers, setVacationsFolowers] = useState([]);
   const [vacationsFolowersList, setVacationsFolowersList] = useState([]);
   const user = useSelector((state) => state.user);
 
-  const onCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  const openFormModalHandler = (vacationToUpdate) => {
-    setVacationForEdit(vacationToUpdate);
-    setOpenModal(true);
-  };
-
   useEffect(() => {
     getVacationsList();
-  }, [onCloseModal]);
+  }, []);
 
   const getVacationsList = async () => {
     const list = await VacationsFunctions.getAllVacations();
@@ -44,7 +33,8 @@ const Vacations = (props) => {
   };
 
   const deleteVacationHandler = (vacationId) => {
-    VacationsFunctions.deleteVacation(vacationId);
+    // VacationsFunctions.deleteVacation(vacationId);
+    socket.emit("send_message", "Vacation was deleted by the admin");
   };
 
   return (
@@ -59,14 +49,11 @@ const Vacations = (props) => {
             followers={vacationsFolowers}
             addFollower={followEventHandler}
             usersVacations={vacationsFolowersList}
-            onEdit={openFormModalHandler}
+            socketObj={socket}
             onDelete={deleteVacationHandler}
           />
         );
       })}
-      {openModal && (
-        <Modal item={vacationForEdit} onCloseModal={onCloseModal} />
-      )}
     </>
   );
 };

@@ -1,3 +1,5 @@
+import { io } from "socket.io-client";
+
 const addNewVacation = async (newVacationObj) => {
   const preperdVacation = {
     ...newVacationObj,
@@ -61,7 +63,7 @@ export const updateVacation = async (updatedVacation) => {
       .substring(0, 10),
     endDate: new Date(updatedVacation.endDate).toISOString().substring(0, 10),
   };
-  console.log(preperdVacationBody);
+
   const respone = await fetch(
     `http://localhost:5000/api/vacations/${updatedVacation.id}`,
     {
@@ -94,6 +96,8 @@ const deleteVacation = async (id) => {
     console.log(response.statusText);
   }
 };
+
+export const socket = io.connect("http://localhost:5001");
 
 export default {
   sendImage,

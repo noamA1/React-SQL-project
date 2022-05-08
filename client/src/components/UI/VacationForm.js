@@ -16,13 +16,12 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Field, Form, Formik } from "formik";
 // import moment from "moment";
 import { useEffect, useRef, useState } from "react";
-import VacationsFunctions, {
-  updateVacation,
-} from "../../common/VacationsFunctions";
+import VacationsFunctions from "../../common/VacationsFunctions";
 import { vacationValidationSchema } from "../../common/Validation";
 
 const VacationForm = (props) => {
   const [isEditMode, setIsEditMode] = useState(false);
+
   const [image, setImage] = useState({ preview: "", data: "" });
   const [values, setValues] = useState({
     destination: (props.vacation && props.vacation.destination) || "",
@@ -43,7 +42,7 @@ const VacationForm = (props) => {
     if (props.vacation) {
       setIsEditMode(true);
     }
-  }, []);
+  }, [props.vacation]);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -77,10 +76,11 @@ const VacationForm = (props) => {
     } else {
       if (isEditMode) {
         const setValuesForServer = { ...values, id: props.vacation.id };
-        updateVacation(setValuesForServer);
+
+        props.onUpdate(setValuesForServer);
         props.onClose();
       } else {
-        VacationsFunctions.addNewVacation(values);
+        props.onAdd(values);
       }
     }
   };

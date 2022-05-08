@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, Navigate } from "react-router";
 import "./App.css";
 import MainNavigation from "./components/layout/MainNavigation";
@@ -7,14 +7,26 @@ import AuthPage from "./components/pages/auth/AuthPage.js";
 import Home from "./components/pages/Home.js";
 import Profile from "./components/pages/Profile.js";
 import Vacations from "./components/pages/Vacations.js";
+import io from "socket.io-client";
+import { useEffect } from "react";
+import { getMessages } from "./stateManagement/webSocket.js";
+
+const socket = io.connect("http://localhost:5001");
 
 function App() {
   const user = useSelector((state) => state.user);
-  console.log(user);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      dispatch(getMessages({ receivedMessage: data }));
+    });
+  }, []);
   return (
     <div className='App'>
       <header>
-        <MainNavigation />
+        <MainNavigation socketObj={socket} />
       </header>
       <main>
         <Routes>
@@ -24,8 +36,14 @@ function App() {
           {user.isSignIn && (
             <>
               <Route path='/home' element={<Home />} />
-              <Route path='/vacations' element={<Vacations />} />
-              <Route path='/add-vacation' element={<AddVacation />} />
+              <Route
+                path='/vacations'
+                element={<Vacations socketObj={socket} />}
+              />
+              <Route
+                path='/add-vacation'
+                element={<AddVacation socketObj={socket} />}
+              />
               <Route path='/profile' element={<Profile />} />
             </>
           )}

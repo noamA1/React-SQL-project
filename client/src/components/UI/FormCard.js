@@ -25,6 +25,8 @@ import {
   registerValidationSchema,
 } from "../../common/Validation";
 import { Formik, Form, Field } from "formik";
+import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
+import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 
 const FormCard = (props) => {
   const title = props.title;
@@ -132,10 +134,26 @@ const FormCard = (props) => {
     <Container className={classes.formContainer} maxWidth='sm'>
       <Card className={classes.card} sx={{ justifyItems: "center" }}>
         <AccountCircle
-          sx={{ fontSize: 60, marginLeft: "auto", marginRight: "auto" }}
-          color='primary'
+          sx={{
+            fontSize: 60,
+            marginLeft: "auto",
+            marginRight: "auto",
+            color: "#3bc9db",
+          }}
         />
-        <CardHeader title={cardTitle} />
+        <CardHeader
+          title={cardTitle}
+          titleTypographyProps={{
+            fontFamily: "Roboto",
+            fontSize: "34px",
+            fontWeight: "500",
+            color: "transparent",
+          }}
+          sx={{
+            backgroundImage: `linear-gradient(90deg, rgba(145, 211, 219, 1) 0%, rgba(80, 203, 196, 1) 50%, rgba(105, 196, 169, 1) 100%)`,
+            backgroundClip: "text",
+          }}
+        />
         <CardContent>
           <Formik
             initialValues={values}
@@ -270,11 +288,20 @@ const FormCard = (props) => {
                   <Button
                     type='submit'
                     variant='contained'
-                    color='primary'
                     size='large'
+                    sx={{
+                      backgroundColor: "#22b8cf",
+                      ":hover": { backgroundColor: "#66d9e8" },
+                    }}
                     disabled={(!isValid || !dirty) && title !== "Profile"}
                     onClick={submitHandler}
                   >
+                    {buttonText === "Register" && (
+                      <PersonAddAltRoundedIcon sx={{ mr: 1.5 }} />
+                    )}
+                    {buttonText === "Login" && (
+                      <LoginRoundedIcon sx={{ mr: 1.5 }} />
+                    )}
                     {buttonText}
                   </Button>
                 </CardActions>

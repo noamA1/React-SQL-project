@@ -23,13 +23,15 @@ const Modal = (props) => {
 
   const onSubmiteHandler = (vacation) => {
     console.log(vacation);
-    socketObj.emit("send_message", "Vacation was updated by the admin");
+    socketObj.emit("send_message", {
+      message: "Vacation was updated by the admin",
+      time: new Date(),
+    });
     // VacationsFunctions.updateVacation(vacation);
   };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add new Medicine:</DialogTitle>
       <VacationForm
         vacation={props.item}
         onClose={handleClose}

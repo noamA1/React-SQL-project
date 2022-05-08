@@ -74,7 +74,7 @@ const VacationCard = (props) => {
   };
   return (
     <>
-      <Card key={`vacation-card-${id}`} sx={{ maxWidth: 450 }}>
+      <Card key={`vacation-card-${id}`} sx={{ width: 400 }}>
         <CardActionArea>
           {image !== "" && (
             <CardMedia
@@ -85,10 +85,19 @@ const VacationCard = (props) => {
             />
           )}
           <CardContent>
-            <Typography gutterBottom variant='h4' component='div'>
+            <Typography
+              gutterBottom
+              variant='h4'
+              component='div'
+              sx={{ fontWeight: "700", fontStyle: "italic" }}
+            >
               {destination}
             </Typography>
-            <Typography variant='subtitle1' color='text.primery'>
+            <Typography
+              variant='subtitle1'
+              color='text.primery'
+              sx={{ fontWeight: "600" }}
+            >
               {description}
             </Typography>
             <Typography variant='body1' color='text.secondary'>
@@ -110,17 +119,21 @@ const VacationCard = (props) => {
               alignItems: "center",
             }}
           >
-            <Typography>{vacationFollowers.followers}</Typography>
+            <Typography sx={{ fontSize: 23, fontWeight: 700 }}>
+              {vacationFollowers.followers}
+            </Typography>
             <Tooltip title={!disabledButton ? "Follow" : "Unfollow"}>
               <IconButton
                 variant='outlined'
-                startIcon={<ThumbUpRoundedIcon />}
                 onClick={() => {
                   props.addFollower(id);
                 }}
               >
                 <FavoriteRoundedIcon
-                  sx={{ color: disabledButton ? "red" : "black" }}
+                  sx={{
+                    color: disabledButton ? "#fa5252" : "#495057",
+                    fontSize: 32,
+                  }}
                 />
               </IconButton>
             </Tooltip>
@@ -132,12 +145,12 @@ const VacationCard = (props) => {
                 openFormModalHandler();
               }}
             >
-              <EditIcon />
+              <EditIcon sx={{ fontSize: 30, color: "#3bc9db" }} />
             </IconButton>
           </Tooltip>
           <Tooltip title='Delete Vacation'>
             <IconButton onClick={deleteHandler}>
-              <DeleteIcon />
+              <DeleteIcon sx={{ fontSize: 30, color: "#e03131" }} />
             </IconButton>
           </Tooltip>
         </CardActions>

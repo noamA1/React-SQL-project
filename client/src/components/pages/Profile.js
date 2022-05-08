@@ -1,3 +1,4 @@
+import { Container } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { updateInfo } from "../../stateManagement/user.js";
 import { updateUser } from "../../stateManagement/userActions.js";
@@ -11,10 +12,9 @@ const Profile = (props) => {
     dispatch(updateInfo({ userInfo: userToUpdate }));
   };
   return (
-    <>
-      <h1>Profile page</h1>
+    <Container sx={{ mt: "15vh" }}>
       <FormCard title='Profile' updateProfile={updateProfileHandler} />
-    </>
+    </Container>
   );
 };
 

@@ -1,3 +1,4 @@
+import { Container } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../../../stateManagement/user";
@@ -29,14 +30,13 @@ const AuthPage = () => {
   };
 
   return (
-    <>
-      <h1>Auth Page</h1>
+    <Container sx={{ mt: "15vh" }}>
       <FormCard
         title='Login'
         onRegister={registerHandler}
         onLogIn={logInHandler}
       />
-    </>
+    </Container>
   );
 };
 

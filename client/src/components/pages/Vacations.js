@@ -1,3 +1,4 @@
+import { Container, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import VacationsFunctions from "../../common/VacationsFunctions.js";
@@ -33,27 +34,40 @@ const Vacations = (props) => {
   };
 
   const deleteVacationHandler = (vacationId) => {
+    console.log(new Date());
     // VacationsFunctions.deleteVacation(vacationId);
-    socket.emit("send_message", "Vacation was deleted by the admin");
+    socket.emit("send_message", {
+      message: "Vacation was deleted by the admin",
+      time: new Date(),
+    });
   };
 
   return (
     <>
-      <h1>Vacations Page!</h1>
-      {vacationsList.map((vacation) => {
-        return (
-          <VacationCard
-            key={`vacation-${vacation.id}`}
-            item={vacation}
-            userId={user.userId}
-            followers={vacationsFolowers}
-            addFollower={followEventHandler}
-            usersVacations={vacationsFolowersList}
-            socketObj={socket}
-            onDelete={deleteVacationHandler}
-          />
-        );
-      })}
+      <h1>Our Vacations</h1>
+      <Grid
+        container
+        direction='row'
+        justifyContent='space-evenly'
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+      >
+        {vacationsList.map((vacation) => {
+          return (
+            <Grid item key={`vacation-${vacation.id}`}>
+              <VacationCard
+                item={vacation}
+                userId={user.userId}
+                followers={vacationsFolowers}
+                addFollower={followEventHandler}
+                usersVacations={vacationsFolowersList}
+                socketObj={socket}
+                onDelete={deleteVacationHandler}
+              />
+            </Grid>
+          );
+        })}
+      </Grid>
     </>
   );
 };

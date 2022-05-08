@@ -1,12 +1,14 @@
 import {
   Button,
   Container,
+  Divider,
   FormControl,
   FormHelperText,
   IconButton,
   InputLabel,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import PhotoSizeSelectActualOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActualOutlined";
 
@@ -18,6 +20,7 @@ import { Field, Form, Formik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import VacationsFunctions from "../../common/VacationsFunctions";
 import { vacationValidationSchema } from "../../common/Validation";
+import { useNavigate } from "react-router-dom";
 
 const VacationForm = (props) => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -31,6 +34,7 @@ const VacationForm = (props) => {
     endDate: (props.vacation && props.vacation.endDate) || new Date(),
     image: (props.vacation && props.vacation.image) || "",
   });
+  const navigate = useNavigate();
 
   const [datesAndImageErrors, setdatesAndImageErrors] = useState({
     startDateError: false,
@@ -76,12 +80,20 @@ const VacationForm = (props) => {
     } else {
       if (isEditMode) {
         const setValuesForServer = { ...values, id: props.vacation.id };
-
         props.onUpdate(setValuesForServer);
         props.onClose();
       } else {
         props.onAdd(values);
+        navigate("/vacations");
       }
+    }
+  };
+
+  const cancelHandler = () => {
+    if (isEditMode) {
+      props.onClose();
+    } else {
+      navigate("/vacations");
     }
   };
 
@@ -112,16 +124,20 @@ const VacationForm = (props) => {
       maxWidth='md'
       sx={{
         m: "auto",
-        width: "100%",
+        width: !isEditMode ? "100%" : "90%",
         display: "flex",
         flexDirection: "column",
+        textAlign: "center",
       }}
     >
+      <h1 style={{ textAlign: "center" }}>
+        {!isEditMode ? "Add New Vacation" : "Edit Vacation"}
+      </h1>
+
       <Formik
         initialValues={values}
         validationSchema={vacationValidationSchema}
         onSubmit={(vacationFormValues, formikHelpers) => {
-          console.log(vacationFormValues);
           submitHandler();
           formikHelpers.resetForm();
         }}
@@ -129,7 +145,7 @@ const VacationForm = (props) => {
         {({ errors, isValid, touched, dirty }) => (
           <Form>
             <FormControl
-              sx={{ m: 2, width: "100%" }}
+              sx={{ mb: 2, width: "100%" }}
               variant='outlined'
               onChange={handleChange("destination")}
             >
@@ -148,7 +164,7 @@ const VacationForm = (props) => {
               />
             </FormControl>
             <FormControl
-              sx={{ m: 2, width: "100%" }}
+              sx={{ mb: 2, width: "100%" }}
               variant='outlined'
               onChange={handleChange("description")}
             >
@@ -167,7 +183,7 @@ const VacationForm = (props) => {
               />
             </FormControl>
             <FormControl
-              sx={{ m: 2, width: "100%" }}
+              sx={{ mb: 2, width: "100%" }}
               variant='outlined'
               onChange={handleChange("price")}
             >
@@ -184,7 +200,7 @@ const VacationForm = (props) => {
               />
             </FormControl>
 
-            <FormControl sx={{ m: 2, width: "100%" }} variant='outlined'>
+            <FormControl sx={{ mb: 2, width: "100%" }} variant='outlined'>
               <InputLabel htmlFor='outlined-adornment-image'>Image</InputLabel>
               <>
                 <IconButton
@@ -203,14 +219,16 @@ const VacationForm = (props) => {
                   onChange={handleFileChange}
                 />
                 {datesAndImageErrors.imageError && (
-                  <FormHelperText id='component-helper-text'>
+                  <FormHelperText
+                    sx={{ color: "red", fontSize: "14px", fontWeight: 600 }}
+                  >
                     Image is required
                   </FormHelperText>
                 )}
               </>
             </FormControl>
             <LocalizationProvider dateAdapter={AdapterMoment}>
-              <Stack spacing={3} sx={{ m: 2, width: "100%" }}>
+              <Stack spacing={3} sx={{ mb: 2, width: "100%" }}>
                 <DesktopDatePicker
                   label='Start Date'
                   inputFormat='DD/MM/yyyy'
@@ -220,7 +238,9 @@ const VacationForm = (props) => {
                   error={!datesAndImageErrors.startDateError}
                 />
                 {datesAndImageErrors.startDateError && (
-                  <FormHelperText id='component-helper-text'>
+                  <FormHelperText
+                    sx={{ color: "red", fontSize: "14px", fontWeight: 600 }}
+                  >
                     Start date is required
                   </FormHelperText>
                 )}
@@ -233,28 +253,47 @@ const VacationForm = (props) => {
                   renderInput={(params) => <TextField {...params} />}
                 />
                 {datesAndImageErrors.endDateError && (
-                  <FormHelperText id='component-helper-text'>
+                  <FormHelperText
+                    sx={{ color: "red", fontSize: "14px", fontWeight: 600 }}
+                  >
                     End date is required
                   </FormHelperText>
                 )}
               </Stack>
             </LocalizationProvider>
-
-            <Button
-              type='submit'
-              onClick={submitHandler}
-              variant='contained'
-              color='primary'
-              size='large'
-              disabled={
-                !isValid ||
-                !dirty ||
-                (datesAndImageErrors.startDateError &&
-                  datesAndImageErrors.endDateError)
-              }
+            <Stack
+              direction='row'
+              divider={<Divider orientation='vertical' flexItem />}
+              spacing={2}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                mb: isEditMode ? "15px" : "none",
+              }}
             >
-              {!isEditMode ? "Add Vacation" : "Edit vacation"}
-            </Button>
+              <Button
+                type='submit'
+                onClick={submitHandler}
+                variant='contained'
+                sx={{
+                  backgroundColor: "#22b8cf",
+                  ":hover": { backgroundColor: "#66d9e8" },
+                }}
+                size='large'
+                disabled={
+                  !isValid ||
+                  !dirty ||
+                  (datesAndImageErrors.startDateError &&
+                    datesAndImageErrors.endDateError &&
+                    datesAndImageErrors.imageError)
+                }
+              >
+                {!isEditMode ? "Add Vacation" : "Edit vacation"}
+              </Button>
+              <Button type='button' onClick={cancelHandler} size='large'>
+                Cancel
+              </Button>
+            </Stack>
           </Form>
         )}
       </Formik>

@@ -16,6 +16,7 @@ export const userSlice = createSlice({
         lastName: action.payload.userInfo.lastName,
         email: action.payload.userInfo.email,
       };
+      state.fullName = `${state.userInfo.firstName} ${state.userInfo.lastName}`;
     },
     signIn: (state, action) => {
       state.isSignIn = true;

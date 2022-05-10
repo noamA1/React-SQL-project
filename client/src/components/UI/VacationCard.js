@@ -49,7 +49,7 @@ const VacationCard = (props) => {
     } else {
       setVacationFollowers(findFollowers);
     }
-  });
+  }, [props.followers, id]);
 
   useEffect(() => {
     const findVacation = props.usersVacations.find(
@@ -58,7 +58,7 @@ const VacationCard = (props) => {
     if (findVacation !== undefined) {
       setDisabledButton(true);
     }
-  });
+  }, [props.usersVacations, id]);
 
   if (
     image.includes("some") ||
@@ -72,6 +72,16 @@ const VacationCard = (props) => {
   const deleteHandler = () => {
     props.onDelete(id);
   };
+
+  const followClickHandler = () => {
+    if (!disabledButton) {
+      props.addFollower(id);
+    } else {
+      props.unFollow(id);
+      setDisabledButton(false);
+    }
+  };
+
   return (
     <>
       <Card key={`vacation-card-${id}`} sx={{ width: 400 }}>
@@ -123,12 +133,7 @@ const VacationCard = (props) => {
               {vacationFollowers.followers}
             </Typography>
             <Tooltip title={!disabledButton ? "Follow" : "Unfollow"}>
-              <IconButton
-                variant='outlined'
-                onClick={() => {
-                  props.addFollower(id);
-                }}
-              >
+              <IconButton variant='outlined' onClick={followClickHandler}>
                 <FavoriteRoundedIcon
                   sx={{
                     color: disabledButton ? "#fa5252" : "#495057",

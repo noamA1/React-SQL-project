@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Card,
   CardActions,
@@ -131,186 +132,190 @@ const FormCard = (props) => {
   };
 
   return (
-    <Container className={classes.formContainer} maxWidth='sm'>
-      <Card className={classes.card} sx={{ justifyItems: "center" }}>
-        <AccountCircle
-          sx={{
-            fontSize: 60,
-            marginLeft: "auto",
-            marginRight: "auto",
-            color: "#3bc9db",
-          }}
-        />
-        <CardHeader
-          title={cardTitle}
-          titleTypographyProps={{
-            fontFamily: "Roboto",
-            fontSize: "34px",
-            fontWeight: "500",
-            color: "transparent",
-          }}
-          sx={{
-            backgroundImage: `linear-gradient(90deg, rgba(145, 211, 219, 1) 0%, rgba(80, 203, 196, 1) 50%, rgba(105, 196, 169, 1) 100%)`,
-            backgroundClip: "text",
-          }}
-        />
-        <CardContent>
-          <Formik
-            initialValues={values}
-            validationSchema={schema}
-            onSubmit={(formValues) => {
-              submitHandler();
+    <>
+      <Container className={classes.formContainer} maxWidth='sm'>
+        <Card className={classes.card} sx={{ justifyItems: "center" }}>
+          <AccountCircle
+            sx={{
+              fontSize: 60,
+              marginLeft: "auto",
+              marginRight: "auto",
+              color: "#3bc9db",
             }}
-          >
-            {({ errors, isValid, touched, dirty }) => (
-              <Form>
-                {(!isLogin || title === "Profile") && (
-                  <>
-                    <FormControl
-                      sx={{ m: 1, width: "100%" }}
-                      variant='outlined'
-                      onChange={handleChange("firstName")}
-                    >
-                      <Field
-                        name='firstName'
-                        type='text'
-                        as={TextField}
-                        value={values.firstName}
+          />
+          <CardHeader
+            title={cardTitle}
+            titleTypographyProps={{
+              fontFamily: "Roboto",
+              fontSize: "34px",
+              fontWeight: "500",
+              color: "transparent",
+            }}
+            sx={{
+              backgroundImage: `linear-gradient(90deg, rgba(145, 211, 219, 1) 0%, rgba(80, 203, 196, 1) 50%, rgba(105, 196, 169, 1) 100%)`,
+              backgroundClip: "text",
+            }}
+          />
+          <CardContent>
+            <Formik
+              initialValues={values}
+              validationSchema={schema}
+              onSubmit={(formValues) => {
+                submitHandler();
+              }}
+            >
+              {({ errors, isValid, touched, dirty }) => (
+                <Form>
+                  {(!isLogin || title === "Profile") && (
+                    <>
+                      <FormControl
+                        sx={{ m: 1, width: "100%" }}
                         variant='outlined'
-                        color='primary'
-                        label='First Name'
-                        error={
-                          Boolean(errors.firstName) &&
-                          Boolean(touched.firstName)
-                        }
-                        helperText={
-                          Boolean(touched.firstName) && errors.firstName
-                        }
-                      />
-                    </FormControl>
-                    <FormControl
-                      sx={{ m: 1, width: "100%" }}
-                      variant='outlined'
-                      onChange={handleChange("lastName")}
-                    >
-                      <Field
-                        name='lastName'
-                        type='text'
-                        as={TextField}
-                        value={values.lastName}
+                        onChange={handleChange("firstName")}
+                      >
+                        <Field
+                          name='firstName'
+                          type='text'
+                          as={TextField}
+                          value={values.firstName}
+                          variant='outlined'
+                          color='primary'
+                          label='First Name'
+                          error={
+                            Boolean(errors.firstName) &&
+                            Boolean(touched.firstName)
+                          }
+                          helperText={
+                            Boolean(touched.firstName) && errors.firstName
+                          }
+                        />
+                      </FormControl>
+                      <FormControl
+                        sx={{ m: 1, width: "100%" }}
                         variant='outlined'
-                        color='primary'
-                        label='Last Name'
-                        error={
-                          Boolean(errors.lastName) && Boolean(touched.lastName)
-                        }
-                        helperText={
-                          Boolean(touched.lastName) && errors.lastName
-                        }
-                      />
-                    </FormControl>
-                  </>
-                )}
+                        onChange={handleChange("lastName")}
+                      >
+                        <Field
+                          name='lastName'
+                          type='text'
+                          as={TextField}
+                          value={values.lastName}
+                          variant='outlined'
+                          color='primary'
+                          label='Last Name'
+                          error={
+                            Boolean(errors.lastName) &&
+                            Boolean(touched.lastName)
+                          }
+                          helperText={
+                            Boolean(touched.lastName) && errors.lastName
+                          }
+                        />
+                      </FormControl>
+                    </>
+                  )}
 
-                <FormControl
-                  sx={{ m: 1, width: "100%" }}
-                  variant='outlined'
-                  onChange={handleChange("email")}
-                  onBlur={checkEmailHandler}
-                >
-                  <Field
-                    name='email'
-                    type='email'
-                    as={TextField}
+                  <FormControl
+                    sx={{ m: 1, width: "100%" }}
                     variant='outlined'
-                    color='primary'
-                    label='Email'
-                    error={
-                      (Boolean(errors.email) && Boolean(touched.email)) ||
-                      isExists.flag
-                    }
-                    helperText={
-                      (Boolean(touched.email) && errors.email) ||
-                      (isExists.flag && !isLogin && isExists.message)
-                    }
-                  />
-                </FormControl>
-
-                {title !== "Profile" && (
-                  <>
-                    <FormControl
-                      sx={{ m: 1, width: "100%" }}
-                      variant='outlined'
-                      onChange={handleChange("password")}
-                    >
-                      <Field
-                        name='password'
-                        type={values.showPassword ? "text" : "password"}
-                        as={TextField}
-                        variant='outlined'
-                        color='primary'
-                        label='Password'
-                        error={
-                          Boolean(errors.password) && Boolean(touched.password)
-                        }
-                        helperText={
-                          Boolean(touched.password) && errors.password
-                        }
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position='end'>
-                              <IconButton
-                                aria-label='toggle password visibility'
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge='end'
-                              >
-                                {values.showPassword ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </FormControl>
-                    <Button size='small' onClick={switchAuthModeHandler}>
-                      {isLogin
-                        ? "Create new account"
-                        : "Login with existing account"}
-                    </Button>
-                  </>
-                )}
-
-                <CardActions sx={{ justifyContent: "center" }}>
-                  <Button
-                    type='submit'
-                    variant='contained'
-                    size='large'
-                    sx={{
-                      backgroundColor: "#22b8cf",
-                      ":hover": { backgroundColor: "#66d9e8" },
-                    }}
-                    disabled={(!isValid || !dirty) && title !== "Profile"}
-                    onClick={submitHandler}
+                    onChange={handleChange("email")}
+                    onBlur={checkEmailHandler}
                   >
-                    {buttonText === "Register" && (
-                      <PersonAddAltRoundedIcon sx={{ mr: 1.5 }} />
-                    )}
-                    {buttonText === "Login" && (
-                      <LoginRoundedIcon sx={{ mr: 1.5 }} />
-                    )}
-                    {buttonText}
-                  </Button>
-                </CardActions>
-              </Form>
-            )}
-          </Formik>
-        </CardContent>
-      </Card>
-    </Container>
+                    <Field
+                      name='email'
+                      type='email'
+                      as={TextField}
+                      variant='outlined'
+                      color='primary'
+                      label='Email'
+                      error={
+                        (Boolean(errors.email) && Boolean(touched.email)) ||
+                        isExists.flag
+                      }
+                      helperText={
+                        (Boolean(touched.email) && errors.email) ||
+                        (isExists.flag && !isLogin && isExists.message)
+                      }
+                    />
+                  </FormControl>
+
+                  {title !== "Profile" && (
+                    <>
+                      <FormControl
+                        sx={{ m: 1, width: "100%" }}
+                        variant='outlined'
+                        onChange={handleChange("password")}
+                      >
+                        <Field
+                          name='password'
+                          type={values.showPassword ? "text" : "password"}
+                          as={TextField}
+                          variant='outlined'
+                          color='primary'
+                          label='Password'
+                          error={
+                            Boolean(errors.password) &&
+                            Boolean(touched.password)
+                          }
+                          helperText={
+                            Boolean(touched.password) && errors.password
+                          }
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position='end'>
+                                <IconButton
+                                  aria-label='toggle password visibility'
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                  edge='end'
+                                >
+                                  {values.showPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </FormControl>
+                      <Button size='small' onClick={switchAuthModeHandler}>
+                        {isLogin
+                          ? "Create new account"
+                          : "Login with existing account"}
+                      </Button>
+                    </>
+                  )}
+
+                  <CardActions sx={{ justifyContent: "center" }}>
+                    <Button
+                      type='submit'
+                      variant='contained'
+                      size='large'
+                      sx={{
+                        backgroundColor: "#22b8cf",
+                        ":hover": { backgroundColor: "#66d9e8" },
+                      }}
+                      disabled={(!isValid || !dirty) && title !== "Profile"}
+                      onClick={submitHandler}
+                    >
+                      {buttonText === "Register" && (
+                        <PersonAddAltRoundedIcon sx={{ mr: 1.5 }} />
+                      )}
+                      {buttonText === "Login" && (
+                        <LoginRoundedIcon sx={{ mr: 1.5 }} />
+                      )}
+                      {buttonText}
+                    </Button>
+                  </CardActions>
+                </Form>
+              )}
+            </Formik>
+          </CardContent>
+        </Card>
+      </Container>
+    </>
   );
 };
 

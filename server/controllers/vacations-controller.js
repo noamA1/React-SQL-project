@@ -121,6 +121,19 @@ vacationsRouter.delete(
   }
 );
 
+vacationsRouter.delete(
+  `${generalSetting.baseUrl}/vacations-followers`,
+  async (req, res) => {
+    const { vacationId, userId } = req.body;
+    const deleteResult = await vacationsBl.deleteFollower(vacationId, userId);
+    if (!checkResultStatus(deleteResult)) {
+      return res.status(500).send(deleteResult);
+    } else {
+      return res.send(deleteResult);
+    }
+  }
+);
+
 vacationsRouter.post(
   `${generalSetting.baseUrl}/vacations-image`,
   upload.single("file"),

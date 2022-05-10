@@ -32,6 +32,10 @@ const deleteVacation = (id) => {
   return vacationsDal.deleteVacation(id);
 };
 
+const deleteFollower = (vacationId, uId) => {
+  return vacationsDal.deleteFollower(vacationId, uId);
+};
+
 export default {
   getAll,
   getBy,
@@ -39,6 +43,7 @@ export default {
   deleteVacation,
   getFollowers,
   addNewFollower,
+  deleteFollower,
   updateVacation,
   getNumOfVactoinsFollowers,
 };

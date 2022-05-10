@@ -9,7 +9,7 @@ import Profile from "./components/pages/Profile.js";
 import Vacations from "./components/pages/Vacations.js";
 import io from "socket.io-client";
 import { useEffect } from "react";
-import { addNotification } from "./stateManagement/webSocket.js";
+import { addNotification } from "./stateManagement/notifications.js";
 
 const socket = io.connect("http://localhost:5001");
 
@@ -20,12 +20,14 @@ function App() {
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      console.log(data);
-      dispatch(
-        addNotification({ message: data.message, timeStemp: data.time })
-      );
+      if (data.message !== undefined) {
+        dispatch(
+          addNotification({ message: data.message, timeStemp: data.time })
+        );
+      }
     });
-  }, []);
+  }, [dispatch]);
+
   return (
     <div className='App'>
       <header>

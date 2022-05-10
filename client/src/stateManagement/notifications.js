@@ -6,7 +6,7 @@ const initialState = {
   messagesArray: [],
 };
 
-export const webSocketSlice = createSlice({
+export const notifications = createSlice({
   name: "socket",
   initialState,
   reducers: {
@@ -23,6 +23,6 @@ export const webSocketSlice = createSlice({
   },
 });
 
-export const { addNotification, clearNotifications } = webSocketSlice.actions;
+export const { addNotification, clearNotifications } = notifications.actions;
 
-export default webSocketSlice.reducer;
+export default notifications.reducer;

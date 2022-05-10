@@ -21,10 +21,11 @@ import { useEffect, useRef, useState } from "react";
 import VacationsFunctions from "../../common/VacationsFunctions";
 import { vacationValidationSchema } from "../../common/Validation";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const VacationForm = (props) => {
   const [isEditMode, setIsEditMode] = useState(false);
-
+  const notificationAlert = useSelector((state) => state.alert);
   const [image, setImage] = useState({ preview: "", data: "" });
   const [values, setValues] = useState({
     destination: (props.vacation && props.vacation.destination) || "",
@@ -84,7 +85,6 @@ const VacationForm = (props) => {
         props.onClose();
       } else {
         props.onAdd(values);
-        navigate("/vacations");
       }
     }
   };

@@ -1,5 +1,7 @@
-import { Dialog, DialogTitle } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Dialog } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../stateManagement/alert.js";
 
 import VacationsFunctions from "../../common/VacationsFunctions";
 import VacationForm from "./VacationForm";
@@ -7,10 +9,11 @@ import VacationForm from "./VacationForm";
 const Modal = (props) => {
   const socketObj = props.socketObj;
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleClickOpen = () => {
+  const handleClickOpen = useCallback(() => {
     setOpen(true);
-  };
+  }, []);
 
   useEffect(() => {
     handleClickOpen();
@@ -27,7 +30,13 @@ const Modal = (props) => {
       message: "Vacation was updated by the admin",
       time: new Date(),
     });
-    // VacationsFunctions.updateVacation(vacation);
+    dispatch(
+      setAlert({
+        type: "info",
+        message: "The vacation has been updated",
+      })
+    );
+    VacationsFunctions.updateVacation(vacation);
   };
 
   return (

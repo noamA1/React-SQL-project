@@ -97,6 +97,24 @@ const deleteVacation = async (id) => {
   }
 };
 
+const removeFollower = async (uId, vacationId) => {
+  const preperdBody = { vacationId, userId: uId };
+
+  const response = await fetch(
+    `http://localhost:5000/api/vacations-followers`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(preperdBody),
+    }
+  );
+  if (response) {
+    console.log(response.statusText);
+  }
+};
+
 export const socket = io.connect("http://localhost:5001");
 
 export default {
@@ -107,5 +125,6 @@ export default {
   getVacationsFollowersCount,
   updateVacation,
   addFollower,
+  removeFollower,
   deleteVacation,
 };

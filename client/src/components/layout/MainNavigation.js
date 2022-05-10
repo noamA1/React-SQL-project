@@ -11,12 +11,12 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../stateManagement/user";
 import { Badge, Divider } from "@mui/material";
-import { clearNotifications } from "../../stateManagement/webSocket";
+import { clearNotifications } from "../../stateManagement/notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ManageAccountsSharpIcon from "@mui/icons-material/ManageAccountsSharp";
 import moment from "moment";
@@ -26,19 +26,29 @@ const settings = ["Profile", "Logout"];
 
 const MainNavigation = (props) => {
   const user = useSelector((state) => state.user);
-  const webSocket = useSelector((state) => state.webSocket);
+  const notifications = useSelector((state) => state.notifications);
   const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElNotification, setAnchorElNotification] = useState(null);
-  const [notifications, setNotifications] = useState(webSocket.messagesArray);
+  const [notificationsArray, setNotificationsArray] = useState(
+    notifications.messagesArray
+  );
+
+  const [userFullName, setUserFullName] = useState("");
 
   const navigate = useNavigate();
 
+  const setNotifications = useCallback(() => {}, []);
+
   useEffect(() => {
-    setNotifications(webSocket.messagesArray);
-  }, [webSocket.messagesArray]);
-  console.log(notifications);
+    // setNotifications();
+    setNotificationsArray(notifications.messagesArray);
+  }, [setNotifications, notifications.messagesArray, setNotificationsArray]);
+
+  useEffect(() => {
+    setUserFullName(user.fullName);
+  }, [user.fullName]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -47,7 +57,7 @@ const MainNavigation = (props) => {
     setAnchorElUser(event.currentTarget);
   };
   const handleOpenNotificationsMenu = (event) => {
-    if (notifications.length > 0) {
+    if (notificationsArray.length > 0) {
       setAnchorElNotification(event.currentTarget);
     }
   };
@@ -168,7 +178,9 @@ const MainNavigation = (props) => {
                 color='inherit'
               >
                 <Badge
-                  badgeContent={notifications ? notifications.length : 0}
+                  badgeContent={
+                    notificationsArray ? notificationsArray.length : 0
+                  }
                   color='error'
                 >
                   <NotificationsIcon sx={{ fontSize: 27 }} />
@@ -191,7 +203,7 @@ const MainNavigation = (props) => {
               open={Boolean(anchorElNotification)}
               onClose={handleCloseNotificationsMenu}
             >
-              {notifications.map((notification, index) => (
+              {notificationsArray.map((notification, index) => (
                 <MenuItem
                   key={`notification-${index}`}
                   onClick={() => {
@@ -245,7 +257,7 @@ const MainNavigation = (props) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem>Welcom back! {user.fullName}</MenuItem>
+              <MenuItem>Welcom back! {userFullName}</MenuItem>
               <Divider />
               {settings.map((setting) => (
                 <MenuItem

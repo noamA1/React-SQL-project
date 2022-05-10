@@ -19,6 +19,7 @@ const Vacations = (props) => {
 
   const getVacationsList = async () => {
     const list = await VacationsFunctions.getAllVacations();
+
     const followersCount =
       await VacationsFunctions.getVacationsFollowersCount();
     const listOfAllFollowers = await VacationsFunctions.getVacationsFollowers();
@@ -38,7 +39,7 @@ const Vacations = (props) => {
 
   useEffect(() => {
     getVacationsList();
-  }, [getVacationsList]);
+  }, []);
 
   useEffect(() => {
     if (notificationAlert.isShow) {

@@ -1,11 +1,7 @@
 import express from "express";
 import usersBl from "../business-logic/users-bl.js";
 import generalSetting from "../common/config.js";
-import {
-  checkPassword,
-  checkResultStatus,
-  // getToken,
-} from "../common/helper.js";
+import { checkPassword, checkResultStatus } from "../common/helper.js";
 import CryptoJS from "crypto-js";
 
 const usersRouter = express.Router();
@@ -45,7 +41,6 @@ usersRouter.get(
       return res.status(500).send(getUserResult);
     } else {
       if (checkPassword(password, getUserResult.data[0].password)) {
-        // const userToken = getToken(email);
         return res.send(getUserResult.data);
       } else {
         return res.json("Invalid Credentials");
@@ -72,7 +67,7 @@ usersRouter.post(`${generalSetting.baseUrl}/users`, async (req, res) => {
 usersRouter.put(`${generalSetting.baseUrl}/users/:id`, async (req, res) => {
   const id = req.params.id;
   const body = req.body;
-  console.log(body);
+
   const updateResult = await usersBl.updateUser(id, body);
   if (!checkResultStatus(updateResult)) {
     return res.status(500).send(updateResult);

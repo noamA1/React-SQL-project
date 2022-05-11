@@ -79,7 +79,7 @@ export const updateVacation = async (updatedVacation) => {
 };
 
 const sendImage = async (formData) => {
-  const response = await fetch(`http://localhost:5000/api/vacations-image`, {
+  const response = await fetch(`http://localhost:5000/api/vacation-image`, {
     method: "POST",
     body: formData,
   });

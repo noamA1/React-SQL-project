@@ -39,7 +39,7 @@ const Vacations = (props) => {
 
   useEffect(() => {
     getVacationsList();
-  }, []);
+  }, [vacationsList]);
 
   useEffect(() => {
     if (notificationAlert.isShow) {
@@ -63,7 +63,6 @@ const Vacations = (props) => {
     dismiss,
     notificationAlert.message,
   ]);
-  // console.log(alertType);
 
   const followEventHandler = (id) => {
     VacationsFunctions.addFollower(user.userId, id);
@@ -84,7 +83,7 @@ const Vacations = (props) => {
         message: "The vacation has been deleted",
       })
     );
-    // dismiss();
+
     socket.emit("send_message", {
       message: "Vacation was deleted by the admin",
       time: new Date(),

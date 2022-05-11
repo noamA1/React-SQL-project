@@ -42,7 +42,6 @@ const MainNavigation = (props) => {
   const setNotifications = useCallback(() => {}, []);
 
   useEffect(() => {
-    // setNotifications();
     setNotificationsArray(notifications.messagesArray);
   }, [setNotifications, notifications.messagesArray, setNotificationsArray]);
 

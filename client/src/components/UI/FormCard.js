@@ -1,5 +1,4 @@
 import {
-  Alert,
   Button,
   Card,
   CardActions,
@@ -18,7 +17,7 @@ import { useEffect, useState } from "react";
 
 import classes from "./FormCard.module.css";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { checkEmail } from "../../stateManagement/userActions";
+import { checkEmail } from "../../common/userActions";
 import { useSelector } from "react-redux";
 import {
   loginValidationSchema,

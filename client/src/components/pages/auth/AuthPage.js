@@ -2,11 +2,10 @@ import { Container } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../../../stateManagement/user";
-import { getUser, postNewUser } from "../../../stateManagement/userActions";
+import { getUser, postNewUser } from "../../../common/userActions.js";
 import FormCard from "../../UI/FormCard";
 
 const AuthPage = () => {
-  // const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

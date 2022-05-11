@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { useSelector } from "react-redux";
-import { data, options, setDataset } from "../../common/Charts.js";
+import { options, setDataset } from "../../common/Charts.js";
 import VacationsFunctions from "../../common/VacationsFunctions.js";
 
 const Home = () => {

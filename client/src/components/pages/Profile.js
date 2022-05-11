@@ -1,9 +1,9 @@
-import { Alert, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Alerts from "../../common/Alerts.js";
 import { updateInfo } from "../../stateManagement/user.js";
-import { updateUser } from "../../stateManagement/userActions.js";
+import { updateUser } from "../../common/userActions.js";
 import FormCard from "../UI/FormCard.js";
 
 const Profile = (props) => {
@@ -16,9 +16,6 @@ const Profile = (props) => {
     setShowAlert(true);
     setTimeout(clearAlert, 5000);
   };
-  console.log(
-    typeof Alerts.successAlert("Your profile was updated successfully")
-  );
 
   const clearAlert = () => {
     setShowAlert(false);

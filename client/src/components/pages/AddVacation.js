@@ -11,7 +11,7 @@ const AddVacation = (props) => {
 
   const addVacationHandler = useCallback(
     (newVacationObj) => {
-      // VacationsFunctions.addNewVacation(newVacationObj);
+      VacationsFunctions.addNewVacation(newVacationObj);
       props.socketObj.emit("send_message", {
         message: "new vacation was added by the admin",
         time: new Date(),

@@ -1,17 +1,14 @@
 import {
-  Badge,
-  Button,
   Card,
   CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
-  Fab,
   IconButton,
   Tooltip,
   Typography,
 } from "@mui/material";
-import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
+
 import EditIcon from "@mui/icons-material/Edit";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -64,7 +61,7 @@ const VacationCard = (props) => {
     image.includes("some") ||
     image.includes("image") ||
     image.includes("images1") ||
-    image.includes("1600x1200")
+    image.includes("arrow-right")
   ) {
     image = "";
   }

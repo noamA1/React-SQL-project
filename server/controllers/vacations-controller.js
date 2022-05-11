@@ -135,10 +135,10 @@ vacationsRouter.delete(
 );
 
 vacationsRouter.post(
-  `${generalSetting.baseUrl}/vacations-image`,
+  `${generalSetting.baseUrl}/vacation-image`,
   upload.single("file"),
   (req, res) => {
-    res.json({ url: "http://localhost:5000/image/" + upload.getFilename });
+    res.json({ url: `${upload.getDestination}` + upload.getFilename });
   }
 );
 

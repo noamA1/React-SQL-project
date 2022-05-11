@@ -1,4 +1,3 @@
-import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import generalSetting from "./common/config.js";
@@ -28,7 +27,6 @@ io.on("connection", (socket) => {
 });
 app.use("/", usersRouter);
 app.use("/", vacationsRouter);
-// app.use(express.static("images"));
 
 app.listen(generalSetting.port, () => {
   console.log(`server is running on port ${generalSetting.port} localhost!`);

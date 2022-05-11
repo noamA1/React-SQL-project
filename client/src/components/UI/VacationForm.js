@@ -8,7 +8,6 @@ import {
   InputLabel,
   Stack,
   TextField,
-  Typography,
 } from "@mui/material";
 import PhotoSizeSelectActualOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActualOutlined";
 
@@ -25,8 +24,7 @@ import { useSelector } from "react-redux";
 
 const VacationForm = (props) => {
   const [isEditMode, setIsEditMode] = useState(false);
-  const notificationAlert = useSelector((state) => state.alert);
-  const [image, setImage] = useState({ preview: "", data: "" });
+  // const notificationAlert = useSelector((state) => state.alert);
   const [values, setValues] = useState({
     destination: (props.vacation && props.vacation.destination) || "",
     description: (props.vacation && props.vacation.description) || "",
@@ -109,12 +107,11 @@ const VacationForm = (props) => {
       data: event.target.files[0],
     };
 
-    setImage(fileUploaded);
     setValues({ ...values, image: fileUploaded.data.name });
-    sendImage();
+    sendImage(fileUploaded);
   };
 
-  const sendImage = () => {
+  const sendImage = (image) => {
     let formData = new FormData();
     formData.append("file", image.data);
     VacationsFunctions.sendImage(formData);

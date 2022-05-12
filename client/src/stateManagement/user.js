@@ -28,7 +28,9 @@ export const userSlice = createSlice({
       };
       state.fullName = `${state.userInfo.firstName} ${state.userInfo.lastName}`;
       state.userId = action.payload.userInfo.id;
+      state.token = action.payload.token;
     },
+
     signOut: () => initialState,
   },
 });

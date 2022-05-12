@@ -7,6 +7,12 @@ const getUser = async (userEmail, userPassword) => {
   return data;
 };
 
+const getNewToken = async (email) => {
+  const respone = await fetch(`http://localhost:5000/api/getToken/${email}`);
+  const data = await respone.json();
+  return data;
+};
+
 const checkEmail = async (userEmail) => {
   const respone = await fetch(`http://localhost:5000/api/users/${userEmail}`);
 
@@ -39,4 +45,4 @@ const updateUser = async (updatedUser, userId) => {
   return data;
 };
 
-export { getUser, postNewUser, checkEmail, updateUser };
+export { getUser, postNewUser, checkEmail, updateUser, getNewToken };

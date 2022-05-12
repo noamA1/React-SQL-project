@@ -21,7 +21,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ManageAccountsSharpIcon from "@mui/icons-material/ManageAccountsSharp";
 import moment from "moment";
 
-const pages = ["Home", "Vacations", "Add-Vacation"];
 const settings = ["Profile", "Logout"];
 
 const MainNavigation = (props) => {
@@ -78,6 +77,7 @@ const MainNavigation = (props) => {
       navigate("/profile");
     } else {
       dispatch(signOut());
+      sessionStorage.removeItem("connected-user");
       navigate("/auth");
     }
     setAnchorElUser(null);
@@ -105,176 +105,220 @@ const MainNavigation = (props) => {
           >
             Vacations Net
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size='large'
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              onClick={handleOpenNavMenu}
-              color='inherit'
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id='menu-appbar'
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
+          {user.isSignIn && (
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size='large'
+                aria-label='account of current user'
+                aria-controls='menu-appbar'
+                aria-haspopup='true'
+                onClick={handleOpenNavMenu}
+                color='inherit'
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id='menu-appbar'
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                {user.userInfo.role === "admin" && (
+                  <>
+                    <MenuItem
+                      key={"home-page"}
+                      onClick={() => {
+                        navigateToHandler("home");
+                      }}
+                    >
+                      <Typography textAlign='center'>Home</Typography>
+                    </MenuItem>
+                    <MenuItem
+                      key={"add-vacation"}
+                      onClick={() => {
+                        navigateToHandler("Add-vacation");
+                      }}
+                    >
+                      <Typography textAlign='center'>Add-vacation</Typography>
+                    </MenuItem>
+                  </>
+                )}
                 <MenuItem
-                  key={page}
+                  key={"vacations-page"}
                   onClick={() => {
-                    navigateToHandler(page);
+                    navigateToHandler("Vacations");
                   }}
                 >
-                  <Typography textAlign='center'>{page}</Typography>
+                  <Typography textAlign='center'>Vacations</Typography>
                 </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+              </Menu>
+            </Box>
+          )}
+
           <Typography
             variant='h6'
             noWrap
             component='div'
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
           >
-            LOGO
+            Vacations Net
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={() => {
-                  navigateToHandler(page);
-                }}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title='Open notifications'>
-              <IconButton
-                onClick={handleOpenNotificationsMenu}
-                sx={{ mr: 3, p: 0 }}
-                color='inherit'
-              >
-                <Badge
-                  badgeContent={
-                    notificationsArray ? notificationsArray.length : 0
-                  }
-                  color='error'
-                >
-                  <NotificationsIcon sx={{ fontSize: 27 }} />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "33px", height: "auto" }}
-              id='menu-appbar'
-              anchorEl={anchorElNotification}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElNotification)}
-              onClose={handleCloseNotificationsMenu}
-            >
-              {notificationsArray.map((notification, index) => (
-                <MenuItem
-                  key={`notification-${index}`}
+          {user.isSignIn && (
+            <>
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                {user.userInfo.role === "admin" && (
+                  <>
+                    <Button
+                      key={"home-page"}
+                      onClick={() => {
+                        navigateToHandler("home");
+                      }}
+                      sx={{ my: 2, color: "white", display: "block" }}
+                    >
+                      Home
+                    </Button>
+                    <Button
+                      key={"add-vacation"}
+                      onClick={() => {
+                        navigateToHandler("Add-vacation");
+                      }}
+                      sx={{ my: 2, color: "white", display: "block" }}
+                    >
+                      Add-vacation
+                    </Button>
+                  </>
+                )}
+                <Button
+                  key={"vacations-page"}
                   onClick={() => {
-                    handleCloseNotificationsMenu();
-                    dispatch(clearNotifications());
+                    navigateToHandler("Vacations");
                   }}
-                  sx={{ position: "relative", height: "40px" }}
+                  sx={{ my: 2, color: "white", display: "block" }}
                 >
-                  <Typography textAlign='center'>
-                    {notification.message}
-                  </Typography>
-                  <Typography
-                    variant='caption'
-                    display='block'
-                    position='absolute'
-                    top='24px'
-                    left='15px'
-                    color='text.secondary'
-                    mb='4px'
+                  Vacations
+                </Button>
+              </Box>
+
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title='Open notifications'>
+                  <IconButton
+                    onClick={handleOpenNotificationsMenu}
+                    sx={{ mr: 3, p: 0 }}
+                    color='inherit'
                   >
-                    {moment(notification.timeStemp)
-                      .startOf("minutes")
-                      .fromNow()}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-
-            <Tooltip title='Open settings'>
-              <IconButton
-                onClick={handleOpenUserMenu}
-                sx={{ p: 0 }}
-                color='inherit'
-              >
-                <AccountCircle sx={{ fontSize: 33 }} />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "33px" }}
-              id='menu-appbar'
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem>Welcom back! {userFullName}</MenuItem>
-              <Divider />
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting}
-                  onClick={() => {
-                    userMenuHandler(setting.toLowerCase());
+                    <Badge
+                      badgeContent={
+                        notificationsArray ? notificationsArray.length : 0
+                      }
+                      color='error'
+                    >
+                      <NotificationsIcon sx={{ fontSize: 27 }} />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "33px", height: "auto" }}
+                  id='menu-appbar'
+                  anchorEl={anchorElNotification}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
                   }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElNotification)}
+                  onClose={handleCloseNotificationsMenu}
                 >
-                  {setting === "Logout" && <LogoutIcon sx={{ mr: 1.5 }} />}
-                  {setting === "Profile" && (
-                    <ManageAccountsSharpIcon sx={{ mr: 1.5 }} />
-                  )}
+                  {notificationsArray.map((notification, index) => (
+                    <MenuItem
+                      key={`notification-${index}`}
+                      onClick={() => {
+                        handleCloseNotificationsMenu();
+                        dispatch(clearNotifications());
+                      }}
+                      sx={{ position: "relative", height: "40px" }}
+                    >
+                      <Typography textAlign='center'>
+                        {notification.message}
+                      </Typography>
+                      <Typography
+                        variant='caption'
+                        display='block'
+                        position='absolute'
+                        top='24px'
+                        left='15px'
+                        color='text.secondary'
+                        mb='4px'
+                      >
+                        {moment(notification.timeStemp)
+                          .startOf("minutes")
+                          .fromNow()}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
 
-                  <Typography textAlign='center'>{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+                <Tooltip title='Open settings'>
+                  <IconButton
+                    onClick={handleOpenUserMenu}
+                    sx={{ p: 0 }}
+                    color='inherit'
+                  >
+                    <AccountCircle sx={{ fontSize: 33 }} />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "33px" }}
+                  id='menu-appbar'
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem>Welcom back! {userFullName}</MenuItem>
+                  <Divider />
+                  {settings.map((setting) => (
+                    <MenuItem
+                      key={setting}
+                      onClick={() => {
+                        userMenuHandler(setting.toLowerCase());
+                      }}
+                    >
+                      {setting === "Logout" && <LogoutIcon sx={{ mr: 1.5 }} />}
+                      {setting === "Profile" && (
+                        <ManageAccountsSharpIcon sx={{ mr: 1.5 }} />
+                      )}
+
+                      <Typography textAlign='center'>{setting}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            </>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

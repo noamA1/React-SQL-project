@@ -12,70 +12,105 @@ import {
 import PhotoSizeSelectActualOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActualOutlined";
 
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-// import { LocalizationProvider } from "@date-io/moment/";
+
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Field, Form, Formik } from "formik";
-// import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import VacationsFunctions from "../../common/VacationsFunctions";
-import { vacationValidationSchema } from "../../common/Validation";
+import {
+  dateDifference,
+  vacationValidationSchema,
+} from "../../common/Validation";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const VacationForm = (props) => {
   const [isEditMode, setIsEditMode] = useState(false);
-  // const notificationAlert = useSelector((state) => state.alert);
   const [values, setValues] = useState({
     destination: (props.vacation && props.vacation.destination) || "",
     description: (props.vacation && props.vacation.description) || "",
     price: (props.vacation && props.vacation.price) || "",
-    startDate: (props.vacation && props.vacation.startDate) || new Date(),
-    endDate: (props.vacation && props.vacation.endDate) || new Date(),
+    startDate: (props.vacation && props.vacation.startDate) || null,
+    endDate: (props.vacation && props.vacation.endDate) || null,
     image: (props.vacation && props.vacation.image) || "",
   });
   const navigate = useNavigate();
 
-  const [datesAndImageErrors, setdatesAndImageErrors] = useState({
+  const [datesAndImageErrors, setDatesAndImageErrors] = useState({
     startDateError: false,
     endDateError: false,
     imageError: false,
+    errorMessage: "",
   });
-  //   const [value, setValue] = useState(moment().format());
+
   useEffect(() => {
     if (props.vacation) {
       setIsEditMode(true);
     }
-  }, [props.vacation]);
+  }, []);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
   const handleStartDateChange = (newValue) => {
-    if (newValue !== "") {
-      setdatesAndImageErrors({ ...datesAndImageErrors, startDateError: false });
-      try {
-        setValues({ ...values, startDate: new Date(newValue).toISOString() });
-      } catch (error) {}
+    checkDate(newValue, "startDateError");
+    try {
+      setValues({ ...values, startDate: new Date(newValue).toISOString() });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const handleEndDateChange = (newValue) => {
-    if (newValue !== "") {
-      setdatesAndImageErrors({ ...datesAndImageErrors, endDateError: false });
-      try {
-        setValues({ ...values, endDate: new Date(newValue).toISOString() });
-      } catch (error) {}
+    checkDate(newValue, "endDateError");
+    try {
+      if (values.startDate !== null) {
+        const isDifferenceValid = dateDifference(values.startDate, newValue);
+        if (!isDifferenceValid) {
+          setDatesAndImageErrors({
+            ...datesAndImageErrors,
+            endDateError: true,
+            errorMessage:
+              "The end date of the vacation must be after the start date of the vacation",
+          });
+        } else {
+          setValues({ ...values, endDate: new Date(newValue).toISOString() });
+        }
+      }
+      setValues({ ...values, endDate: new Date(newValue).toISOString() });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const submitHandler = () => {
-    if (values.startDate === "") {
-      setdatesAndImageErrors({ ...datesAndImageErrors, startDateError: true });
-    } else if (values.endDate === "") {
-      setdatesAndImageErrors({ ...datesAndImageErrors, endDateError: true });
+    const isDifferenceValid = dateDifference(values.startDate, values.endDate);
+    if (!isDifferenceValid) {
+      setDatesAndImageErrors({
+        ...datesAndImageErrors,
+        endDateError: true,
+        errorMessage:
+          "The end date of the vacation must be after the start date of the vacation",
+      });
+    }
+    if (values.startDate === null) {
+      setDatesAndImageErrors({
+        ...datesAndImageErrors,
+        startDateError: true,
+        errorMessage: "Start date is required",
+      });
+    } else if (values.endDate === null) {
+      setDatesAndImageErrors({
+        ...datesAndImageErrors,
+        endDateError: true,
+        errorMessage: "End date is required",
+      });
     } else if (values.image === "") {
-      setdatesAndImageErrors({ ...datesAndImageErrors, imageError: true });
+      setDatesAndImageErrors({
+        ...datesAndImageErrors,
+        imageError: true,
+        errorMessage: "Image is required",
+      });
     } else {
       if (isEditMode) {
         const setValuesForServer = { ...values, id: props.vacation.id };
@@ -84,6 +119,27 @@ const VacationForm = (props) => {
       } else {
         props.onAdd(values);
       }
+    }
+  };
+
+  const checkDate = (date, startOrEnd) => {
+    const givenDate = new Date(date);
+    const today = new Date();
+    const isToday = today.toDateString() === givenDate.toDateString();
+    if (isToday || date === null) {
+      setDatesAndImageErrors({
+        ...datesAndImageErrors,
+        [startOrEnd]: true,
+        errorMessage: startOrEnd.includes("start")
+          ? "The start date of the vacation can not be today"
+          : "The end date of the vacation can not be today",
+      });
+    } else {
+      setDatesAndImageErrors({
+        ...datesAndImageErrors,
+        [startOrEnd]: false,
+        errorMessage: "",
+      });
     }
   };
 
@@ -102,13 +158,26 @@ const VacationForm = (props) => {
   };
 
   const handleFileChange = (event) => {
-    const fileUploaded = {
-      preview: URL.createObjectURL(event.target.files[0]),
-      data: event.target.files[0],
-    };
+    try {
+      const fileUploaded = {
+        preview: URL.createObjectURL(event.target.files[0]),
+        data: event.target.files[0],
+      };
 
-    setValues({ ...values, image: fileUploaded.data.name });
-    sendImage(fileUploaded);
+      setValues({ ...values, image: fileUploaded.data.name });
+      setDatesAndImageErrors({
+        ...datesAndImageErrors,
+        imageError: false,
+        errorMessage: "",
+      });
+      sendImage(fileUploaded);
+    } catch (error) {
+      setDatesAndImageErrors({
+        ...datesAndImageErrors,
+        imageError: true,
+        errorMessage: "Image is required",
+      });
+    }
   };
 
   const sendImage = (image) => {
@@ -134,7 +203,7 @@ const VacationForm = (props) => {
       <Formik
         initialValues={values}
         validationSchema={vacationValidationSchema}
-        onSubmit={(vacationFormValues, formikHelpers) => {
+        onSubmit={(formikHelpers) => {
           submitHandler();
           formikHelpers.resetForm();
         }}
@@ -219,7 +288,7 @@ const VacationForm = (props) => {
                   <FormHelperText
                     sx={{ color: "red", fontSize: "14px", fontWeight: 600 }}
                   >
-                    Image is required
+                    {datesAndImageErrors.errorMessage}
                   </FormHelperText>
                 )}
               </>
@@ -230,6 +299,7 @@ const VacationForm = (props) => {
                   label='Start Date'
                   inputFormat='DD/MM/yyyy'
                   value={values.startDate}
+                  disablePast
                   onChange={handleStartDateChange}
                   renderInput={(params) => <TextField {...params} />}
                   error={!datesAndImageErrors.startDateError}
@@ -238,7 +308,7 @@ const VacationForm = (props) => {
                   <FormHelperText
                     sx={{ color: "red", fontSize: "14px", fontWeight: 600 }}
                   >
-                    Start date is required
+                    {datesAndImageErrors.errorMessage}
                   </FormHelperText>
                 )}
 
@@ -253,7 +323,7 @@ const VacationForm = (props) => {
                   <FormHelperText
                     sx={{ color: "red", fontSize: "14px", fontWeight: 600 }}
                   >
-                    End date is required
+                    {datesAndImageErrors.errorMessage}
                   </FormHelperText>
                 )}
               </Stack>
@@ -280,9 +350,9 @@ const VacationForm = (props) => {
                 disabled={
                   !isValid ||
                   !dirty ||
-                  (datesAndImageErrors.startDateError &&
-                    datesAndImageErrors.endDateError &&
-                    datesAndImageErrors.imageError)
+                  datesAndImageErrors.startDateError ||
+                  datesAndImageErrors.endDateError ||
+                  datesAndImageErrors.imageError
                 }
               >
                 {!isEditMode ? "Add Vacation" : "Edit vacation"}

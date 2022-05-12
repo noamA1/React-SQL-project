@@ -8,15 +8,33 @@ import Home from "./components/pages/Home.js";
 import Profile from "./components/pages/Profile.js";
 import Vacations from "./components/pages/Vacations.js";
 import io from "socket.io-client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { addNotification } from "./stateManagement/notifications.js";
+import { signIn } from "./stateManagement/user";
+import { checkEmail } from "./common/userActions";
+import CryptoJS from "crypto-js";
+import keys from "./common/config";
 
 const socket = io.connect("http://localhost:5001");
 
 function App() {
   const user = useSelector((state) => state.user);
+  const [connectedUser, setConnectedUser] = useState(null);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const userEmailFormStorage = sessionStorage.getItem("connected-user");
+
+    if (userEmailFormStorage !== null) {
+      const bytes = CryptoJS.AES.decrypt(
+        userEmailFormStorage,
+        keys.TOKEN_SECRET
+      );
+      const currentUser = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      dispatch(signIn({ userInfo: { ...currentUser } }));
+    }
+  }, []);
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
@@ -35,20 +53,29 @@ function App() {
       </header>
       <main>
         <Routes>
-          <Route path='/' element={<AuthPage />} />
-          {!user.isSignIn && <Route path='/auth' element={<AuthPage />} />}
+          {!user.isSignIn && (
+            <>
+              <Route path='/' element={<AuthPage />} />
+              <Route path='/auth' element={<AuthPage />} />
+            </>
+          )}
 
           {user.isSignIn && (
             <>
-              <Route path='/home' element={<Home />} />
+              <Route path='/' element={<Vacations />} />
               <Route
                 path='/vacations'
                 element={<Vacations socketObj={socket} />}
               />
-              <Route
-                path='/add-vacation'
-                element={<AddVacation socketObj={socket} />}
-              />
+              {user.userInfo.role === "admin" && (
+                <>
+                  <Route path='/home' element={<Home />} />
+                  <Route
+                    path='/add-vacation'
+                    element={<AddVacation socketObj={socket} />}
+                  />
+                </>
+              )}
               <Route path='/profile' element={<Profile />} />
             </>
           )}

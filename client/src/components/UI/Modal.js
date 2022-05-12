@@ -11,13 +11,9 @@ const Modal = (props) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
-  const handleClickOpen = useCallback(() => {
+  useEffect(() => {
     setOpen(true);
   }, []);
-
-  useEffect(() => {
-    handleClickOpen();
-  }, [handleClickOpen]);
 
   const handleClose = () => {
     setOpen(false);

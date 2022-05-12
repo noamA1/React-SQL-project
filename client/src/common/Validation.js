@@ -38,6 +38,17 @@ export const vacationValidationSchema = Yup.object({
   price: Yup.number().integer().min(100).required("Price is required"),
 });
 
+export const dateDifference = (start, end) => {
+  const diffInMs = new Date(end) - new Date(start);
+  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+  console.log(diffInDays);
+  if (diffInDays < 1) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 // startDate: Yup.date().required("Start Date is required"),
 // endDate: Yup.date().required("End Date is required"),
 // image: Yup.string().required("Image is required"),

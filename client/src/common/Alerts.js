@@ -15,6 +15,7 @@ const errorAlert = (message) => {
     </Alert>
   );
 };
+
 const infoAlert = (message) => {
   return (
     <Alert variant='outlined' severity='info'>
@@ -22,6 +23,7 @@ const infoAlert = (message) => {
     </Alert>
   );
 };
+
 const warningAlert = (message) => {
   return (
     <Alert variant='outlined' severity='warning'>

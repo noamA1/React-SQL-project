@@ -7,10 +7,6 @@ export const registerValidationSchema = Yup.object({
   lastName: Yup.string().required("Last name is required"),
   password: Yup.string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
-    // .matches(
-    //   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])$/,
-    //   "Password must contain an uppercase letter and a lowercase letter and number"
-    // )
     .required("Password is required"),
 });
 
@@ -20,7 +16,6 @@ export const loginValidationSchema = Yup.object({
     .required("Email is required"),
   password: Yup.string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
-    //   .matches(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$'))
     .required("Password is required"),
 });
 
@@ -48,7 +43,3 @@ export const dateDifference = (start, end) => {
     return true;
   }
 };
-
-// startDate: Yup.date().required("Start Date is required"),
-// endDate: Yup.date().required("End Date is required"),
-// image: Yup.string().required("Image is required"),

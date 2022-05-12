@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Alerts from "../../common/Alerts.js";
@@ -94,30 +94,55 @@ const Vacations = (props) => {
     <>
       {notificationAlert.isShow && alertType}
       <h1>Our Vacations</h1>
-      <Grid
-        container
-        direction='row'
-        justifyContent='space-evenly'
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {vacationsList.map((vacation) => {
-          return (
-            <Grid item key={`vacation-${vacation.id}`}>
-              <VacationCard
-                item={vacation}
-                userId={user.userId}
-                followers={vacationsFolowers}
-                addFollower={followEventHandler}
-                unFollow={unFollowHandler}
-                usersVacations={vacationsFolowersList}
-                socketObj={socket}
-                onDelete={deleteVacationHandler}
-              />
-            </Grid>
-          );
-        })}
-      </Grid>
+      {vacationsList.length > 0 && (
+        <Grid
+          container
+          direction='row'
+          justifyContent='space-evenly'
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          {vacationsList.map((vacation) => {
+            return (
+              <Grid item key={`vacation-${vacation.id}`}>
+                <VacationCard
+                  item={vacation}
+                  userId={user.userId}
+                  followers={vacationsFolowers}
+                  addFollower={followEventHandler}
+                  unFollow={unFollowHandler}
+                  usersVacations={vacationsFolowersList}
+                  socketObj={socket}
+                  onDelete={deleteVacationHandler}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
+      )}
+
+      {(vacationsList.length === 0 || vacationsList === null) && (
+        <Box
+          sx={{
+            width: 500,
+            height: 300,
+            backgroundColor: "#c5f6fa",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            m: "auto",
+            borderRadius: "5%",
+          }}
+        >
+          <Typography variant='h3' component='h3' sx={{ color: "#868e96" }}>
+            No vacations yet,
+          </Typography>
+          <Typography variant='h5' component='h5' sx={{ color: " #adb5bd" }}>
+            new vacations will be coming soon
+          </Typography>
+        </Box>
+      )}
     </>
   );
 };

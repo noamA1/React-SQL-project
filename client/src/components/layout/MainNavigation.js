@@ -94,10 +94,11 @@ const MainNavigation = (props) => {
 
   return (
     <AppBar
-      position='static'
+      position='sticky'
       sx={{
         backgroundImage:
           "linear-gradient(90deg, rgba(59,201,219,1) 0%, rgba(50,171,135,1) 100%)",
+        top: 0,
       }}
     >
       <Container maxWidth='xl'>

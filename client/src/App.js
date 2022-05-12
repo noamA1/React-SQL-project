@@ -48,7 +48,7 @@ function App() {
 
   return (
     <div className='App'>
-      <header>
+      <header style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <MainNavigation socketObj={socket} />
       </header>
       <main>

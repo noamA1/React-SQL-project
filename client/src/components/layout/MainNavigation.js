@@ -21,6 +21,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ManageAccountsSharpIcon from "@mui/icons-material/ManageAccountsSharp";
 import moment from "moment";
 
+const pages = ["Home", "Add-Vacation"];
 const settings = ["Profile", "Logout"];
 
 const MainNavigation = (props) => {
@@ -35,6 +36,7 @@ const MainNavigation = (props) => {
   );
 
   const [userFullName, setUserFullName] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,7 +48,10 @@ const MainNavigation = (props) => {
 
   useEffect(() => {
     setUserFullName(user.fullName);
-  }, [user.fullName]);
+    if (user.userInfo.role === "admin") {
+      setIsAdmin(true);
+    }
+  }, [user.fullName, user.userInfo.role]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -106,65 +111,58 @@ const MainNavigation = (props) => {
             Vacations Net
           </Typography>
           {user.isSignIn && (
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size='large'
-                aria-label='account of current user'
-                aria-controls='menu-appbar'
-                aria-haspopup='true'
-                onClick={handleOpenNavMenu}
-                color='inherit'
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id='menu-appbar'
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                {user.userInfo.role === "admin" && (
-                  <>
-                    <MenuItem
-                      key={"home-page"}
-                      onClick={() => {
-                        navigateToHandler("home");
-                      }}
-                    >
-                      <Typography textAlign='center'>Home</Typography>
-                    </MenuItem>
-                    <MenuItem
-                      key={"add-vacation"}
-                      onClick={() => {
-                        navigateToHandler("Add-vacation");
-                      }}
-                    >
-                      <Typography textAlign='center'>Add-vacation</Typography>
-                    </MenuItem>
-                  </>
-                )}
-                <MenuItem
-                  key={"vacations-page"}
-                  onClick={() => {
-                    navigateToHandler("Vacations");
+            <>
+              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+                <IconButton
+                  size='large'
+                  aria-label='account of current user'
+                  aria-controls='menu-appbar'
+                  aria-haspopup='true'
+                  onClick={handleOpenNavMenu}
+                  color='inherit'
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id='menu-appbar'
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: "block", md: "none" },
                   }}
                 >
-                  <Typography textAlign='center'>Vacations</Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
+                  {isAdmin &&
+                    pages.map((page) => (
+                      <MenuItem
+                        key={page}
+                        onClick={() => {
+                          navigateToHandler(page);
+                        }}
+                      >
+                        <Typography textAlign='center'>{page}</Typography>
+                      </MenuItem>
+                    ))}
+                  <MenuItem
+                    key={"Vacations"}
+                    onClick={() => {
+                      navigateToHandler("Vacations");
+                    }}
+                  >
+                    <Typography textAlign='center'>Vacations</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </>
           )}
 
           <Typography
@@ -178,30 +176,20 @@ const MainNavigation = (props) => {
           {user.isSignIn && (
             <>
               <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                {user.userInfo.role === "admin" && (
-                  <>
+                {isAdmin &&
+                  pages.map((page) => (
                     <Button
-                      key={"home-page"}
+                      key={page}
                       onClick={() => {
-                        navigateToHandler("home");
+                        navigateToHandler(page);
                       }}
                       sx={{ my: 2, color: "white", display: "block" }}
                     >
-                      Home
+                      {page}
                     </Button>
-                    <Button
-                      key={"add-vacation"}
-                      onClick={() => {
-                        navigateToHandler("Add-vacation");
-                      }}
-                      sx={{ my: 2, color: "white", display: "block" }}
-                    >
-                      Add-vacation
-                    </Button>
-                  </>
-                )}
+                  ))}
                 <Button
-                  key={"vacations-page"}
+                  key={"Vacations"}
                   onClick={() => {
                     navigateToHandler("Vacations");
                   }}

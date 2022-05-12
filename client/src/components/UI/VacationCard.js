@@ -22,11 +22,11 @@ const VacationCard = (props) => {
   const user = useSelector((state) => state.user);
   let { id, destination, description, image, price, startDate, endDate } =
     props.item;
-  const [disabledButton, setDisabledButton] = useState(false);
+  const [isFollow, setIsFollow] = useState(false);
   const [vacationFollowers, setVacationFollowers] = useState({});
-
   const [openModal, setOpenModal] = useState(false);
   const [vacationForEdit, setVacationForEdit] = useState({});
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const onCloseModal = () => {
     setOpenModal(false);
@@ -36,6 +36,10 @@ const VacationCard = (props) => {
     setVacationForEdit(props.item);
     setOpenModal(true);
   };
+
+  useEffect(() => {
+    user.userInfo.role === "admin" ? setIsAdmin(true) : setIsAdmin(false);
+  }, []);
 
   useEffect(() => {
     const findFollowers = props.followers.find(
@@ -48,14 +52,18 @@ const VacationCard = (props) => {
     }
   }, [props.followers, id]);
 
-  useEffect(() => {
-    const findVacation = props.usersVacations.find(
-      (vacationUser) => vacationUser.vacationId === id
-    );
-    if (findVacation !== undefined) {
-      setDisabledButton(true);
-    }
-  }, [props.usersVacations, id]);
+  useEffect(
+    () => {
+      const findVacation = props.usersVacations.find(
+        (vacationUser) => vacationUser.vacationId === id
+      );
+      if (findVacation !== undefined) {
+        setIsFollow(true);
+      }
+    },
+    [props.usersVacations, id],
+    isFollow
+  );
 
   if (
     image.includes("some") ||
@@ -71,11 +79,12 @@ const VacationCard = (props) => {
   };
 
   const followClickHandler = () => {
-    if (!disabledButton) {
+    if (!isFollow) {
+      setIsFollow(true);
       props.addFollower(id);
     } else {
+      setIsFollow(false);
       props.unFollow(id);
-      setDisabledButton(false);
     }
   };
 
@@ -129,32 +138,38 @@ const VacationCard = (props) => {
             <Typography sx={{ fontSize: 23, fontWeight: 700 }}>
               {vacationFollowers.followers}
             </Typography>
-            <Tooltip title={!disabledButton ? "Follow" : "Unfollow"}>
-              <IconButton variant='outlined' onClick={followClickHandler}>
-                <FavoriteRoundedIcon
-                  sx={{
-                    color: disabledButton ? "#fa5252" : "#495057",
-                    fontSize: 32,
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
+            {!isAdmin && (
+              <Tooltip title={!isFollow ? "Follow" : "Unfollow"}>
+                <IconButton variant='outlined' onClick={followClickHandler}>
+                  <FavoriteRoundedIcon
+                    sx={{
+                      color: isFollow ? "#fa5252" : "#495057",
+                      fontSize: 32,
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+            )}
           </Box>
 
-          <Tooltip title='Edit Vacation'>
-            <IconButton
-              onClick={() => {
-                openFormModalHandler();
-              }}
-            >
-              <EditIcon sx={{ fontSize: 30, color: "#3bc9db" }} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title='Delete Vacation'>
-            <IconButton onClick={deleteHandler}>
-              <DeleteIcon sx={{ fontSize: 30, color: "#e03131" }} />
-            </IconButton>
-          </Tooltip>
+          {isAdmin && (
+            <>
+              <Tooltip title='Edit Vacation'>
+                <IconButton
+                  onClick={() => {
+                    openFormModalHandler();
+                  }}
+                >
+                  <EditIcon sx={{ fontSize: 30, color: "#3bc9db" }} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title='Delete Vacation'>
+                <IconButton onClick={deleteHandler}>
+                  <DeleteIcon sx={{ fontSize: 30, color: "#e03131" }} />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
         </CardActions>
       </Card>
 

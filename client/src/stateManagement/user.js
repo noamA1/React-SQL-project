@@ -25,10 +25,10 @@ export const userSlice = createSlice({
         firstName: action.payload.userInfo.firstName,
         lastName: action.payload.userInfo.lastName,
         email: action.payload.userInfo.email,
+        role: action.payload.userInfo.role,
       };
       state.fullName = `${state.userInfo.firstName} ${state.userInfo.lastName}`;
       state.userId = action.payload.userInfo.id;
-      state.token = action.payload.token;
     },
 
     signOut: () => initialState,

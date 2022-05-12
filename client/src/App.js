@@ -11,7 +11,6 @@ import io from "socket.io-client";
 import { useEffect, useState } from "react";
 import { addNotification } from "./stateManagement/notifications.js";
 import { signIn } from "./stateManagement/user";
-import { checkEmail } from "./common/userActions";
 import CryptoJS from "crypto-js";
 import keys from "./common/config";
 
@@ -32,6 +31,7 @@ function App() {
         keys.TOKEN_SECRET
       );
       const currentUser = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      setConnectedUser(currentUser);
       dispatch(signIn({ userInfo: { ...currentUser } }));
     }
   }, []);
@@ -53,16 +53,14 @@ function App() {
       </header>
       <main>
         <Routes>
-          {!user.isSignIn && (
+          {!user.isSignIn && !connectedUser && (
             <>
-              <Route path='/' element={<AuthPage />} />
               <Route path='/auth' element={<AuthPage />} />
             </>
           )}
 
           {user.isSignIn && (
             <>
-              <Route path='/' element={<Vacations />} />
               <Route
                 path='/vacations'
                 element={<Vacations socketObj={socket} />}
@@ -77,10 +75,11 @@ function App() {
                 </>
               )}
               <Route path='/profile' element={<Profile />} />
+              <Route path='*' element={<Navigate to='/vacations' replace />} />
             </>
           )}
-          {!user.isSignIn && (
-            <Route path='*' element={<Navigate to='/' replace />} />
+          {user.isSignIn && (
+            <Route path='*' element={<Navigate to='/auth' replace />} />
           )}
         </Routes>
       </main>

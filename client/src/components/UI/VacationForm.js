@@ -105,7 +105,7 @@ const VacationForm = (props) => {
         endDateError: true,
         errorMessage: "End date is required",
       });
-    } else if (values.image === "") {
+    } else if (values.image === "" && !isEditMode) {
       setDatesAndImageErrors({
         ...datesAndImageErrors,
         imageError: true,
@@ -185,6 +185,7 @@ const VacationForm = (props) => {
     formData.append("file", image.data);
     VacationsFunctions.sendImage(formData);
   };
+
   return (
     <Container
       maxWidth='md'
@@ -316,6 +317,7 @@ const VacationForm = (props) => {
                   label='End Date'
                   inputFormat='DD/MM/yyyy'
                   value={values.endDate}
+                  disablePast
                   onChange={handleEndDateChange}
                   renderInput={(params) => <TextField {...params} />}
                 />

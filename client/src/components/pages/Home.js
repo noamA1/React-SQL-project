@@ -1,24 +1,33 @@
 import { Box, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { useSelector } from "react-redux";
 import { options, setDataset } from "../../common/Charts.js";
 import VacationsFunctions from "../../common/VacationsFunctions.js";
+import CircularProgressWithLabel from "../UI/CircularProgressWithLabel.js";
 
 const Home = () => {
   const [vacationsList, setVacationsList] = useState([]);
   const [vacationsFolowers, setVacationsFolowers] = useState([]);
   const [cahrtData, setCahrtData] = useState(null);
+  const [progress, setProgress] = useState(10);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getVacationsList = async () => {
     const list = await VacationsFunctions.getAllVacations();
-
+    const timer = setInterval(() => {
+      setProgress((prevProgress) =>
+        prevProgress >= 100 ? 0 : prevProgress + 35
+      );
+    }, 600);
     const followersCount =
       await VacationsFunctions.getVacationsFollowersCount();
 
     setVacationsList(list);
 
     setVacationsFolowers(followersCount);
+    return () => {
+      clearInterval(timer);
+    };
   };
   useEffect(() => {
     getVacationsList();
@@ -29,18 +38,22 @@ const Home = () => {
       const tempCahrtData = setDataset(vacationsList, vacationsFolowers);
       setCahrtData(tempCahrtData);
     }
-  }, [vacationsList, vacationsFolowers]);
+    if (cahrtData !== null && progress >= 100) {
+      setIsLoading(false);
+    }
+  }, [vacationsList, vacationsFolowers, progress]);
 
   return (
     <>
       <h1>Followers summary</h1>
-      {vacationsList.length > 0 && (
+      {isLoading && <CircularProgressWithLabel value={progress} />}
+      {vacationsList.length > 0 && !isLoading && (
         <Container>
           {cahrtData !== null && <Bar options={options} data={cahrtData} />}
         </Container>
       )}
 
-      {(vacationsList.length === 0 || vacationsList === null) && (
+      {!isLoading && (vacationsList.length === 0 || vacationsList === null) && (
         <Box
           sx={{
             width: 500,

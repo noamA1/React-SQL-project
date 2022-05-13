@@ -52,18 +52,12 @@ const VacationCard = (props) => {
     }
   }, [props.followers, id]);
 
-  useEffect(
-    () => {
-      const findVacation = props.usersVacations.find(
-        (vacationUser) => vacationUser.vacationId === id
-      );
-      if (findVacation !== undefined) {
-        setIsFollow(true);
-      }
-    },
-    [props.usersVacations, id],
-    isFollow
-  );
+  useEffect(() => {
+    const findVacation = props.usersVacations.find(
+      (vacationUser) => vacationUser.vacationId === id
+    );
+    findVacation ? setIsFollow(true) : setIsFollow(false);
+  }, [props.usersVacations, id, isFollow]);
 
   if (
     image.includes("some") ||
@@ -80,10 +74,8 @@ const VacationCard = (props) => {
 
   const followClickHandler = () => {
     if (!isFollow) {
-      setIsFollow(true);
       props.addFollower(id);
     } else {
-      setIsFollow(false);
       props.unFollow(id);
     }
   };
@@ -97,7 +89,8 @@ const VacationCard = (props) => {
               component='img'
               height='250'
               src={require(`../../assets/${image}`)}
-              alt='green iguana'
+              alt={`${image}`}
+              loading='lazy'
             />
           )}
           <CardContent>

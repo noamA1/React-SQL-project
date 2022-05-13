@@ -78,7 +78,7 @@ function App() {
               <Route path='*' element={<Navigate to='/vacations' replace />} />
             </>
           )}
-          {user.isSignIn && (
+          {!user.isSignIn && (
             <Route path='*' element={<Navigate to='/auth' replace />} />
           )}
         </Routes>

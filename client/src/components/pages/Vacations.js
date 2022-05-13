@@ -1,9 +1,10 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Alerts from "../../common/Alerts.js";
 import VacationsFunctions from "../../common/VacationsFunctions.js";
 import { dismissAlert, setAlert } from "../../stateManagement/alert.js";
+import CircularProgressWithLabel from "../UI/CircularProgressWithLabel.js";
 import VacationCard from "../UI/VacationCard";
 
 const Vacations = (props) => {
@@ -13,12 +14,19 @@ const Vacations = (props) => {
   const [vacationsList, setVacationsList] = useState([]);
   const [vacationsFolowers, setVacationsFolowers] = useState([]);
   const [vacationsFolowersList, setVacationsFolowersList] = useState([]);
+  const [progress, setProgress] = useState(25);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [alertType, setAlertType] = useState(null);
   const user = useSelector((state) => state.user);
 
   const getVacationsList = async () => {
     const list = await VacationsFunctions.getAllVacations();
+    const timer = setInterval(() => {
+      setProgress((prevProgress) =>
+        prevProgress === 100 ? 0 : prevProgress + 25
+      );
+    }, 800);
 
     const followersCount =
       await VacationsFunctions.getVacationsFollowersCount();
@@ -29,6 +37,9 @@ const Vacations = (props) => {
     setVacationsFolowersList(filteredUserVacationsList);
     setVacationsFolowers(followersCount);
     setVacationsList(list);
+    return () => {
+      clearInterval(timer);
+    };
   };
 
   const dismiss = useCallback(() => {
@@ -39,7 +50,10 @@ const Vacations = (props) => {
 
   useEffect(() => {
     getVacationsList();
-  }, [vacationsList]);
+    if (vacationsList !== null && progress >= 100) {
+      setIsLoading(false);
+    }
+  }, [vacationsList, progress]);
 
   useEffect(() => {
     if (notificationAlert.isShow) {
@@ -94,7 +108,8 @@ const Vacations = (props) => {
     <>
       {notificationAlert.isShow && alertType}
       <h1>Our Vacations</h1>
-      {vacationsList.length > 0 && (
+      {isLoading && <CircularProgressWithLabel value={progress} />}
+      {!isLoading && vacationsList.length > 0 && (
         <Grid
           container
           direction='row'
@@ -121,7 +136,7 @@ const Vacations = (props) => {
         </Grid>
       )}
 
-      {(vacationsList.length === 0 || vacationsList === null) && (
+      {!isLoading && vacationsList === null && (
         <Box
           sx={{
             width: 500,

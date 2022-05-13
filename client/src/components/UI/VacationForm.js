@@ -85,7 +85,7 @@ const VacationForm = (props) => {
 
   const submitHandler = () => {
     const isDifferenceValid = dateDifference(values.startDate, values.endDate);
-    if (!isDifferenceValid) {
+    if (!isDifferenceValid || (!isDifferenceValid && isEditMode)) {
       setDatesAndImageErrors({
         ...datesAndImageErrors,
         endDateError: true,
@@ -302,8 +302,8 @@ const VacationForm = (props) => {
                   value={values.startDate}
                   disablePast
                   onChange={handleStartDateChange}
-                  renderInput={(params) => <TextField {...params} />}
-                  error={!datesAndImageErrors.startDateError}
+                  renderInput={(params) => <TextField {...params} disabled />}
+                  error={datesAndImageErrors.startDateError}
                 />
                 {datesAndImageErrors.startDateError && (
                   <FormHelperText
@@ -319,7 +319,7 @@ const VacationForm = (props) => {
                   value={values.endDate}
                   disablePast
                   onChange={handleEndDateChange}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField {...params} disabled />}
                 />
                 {datesAndImageErrors.endDateError && (
                   <FormHelperText

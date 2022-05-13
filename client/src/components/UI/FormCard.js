@@ -81,7 +81,6 @@ const FormCard = (props) => {
   };
 
   const handleChange = (prop) => (event) => {
-    console.log(event.target.value);
     setValues({ ...values, [prop]: event.target.value });
   };
 

@@ -132,7 +132,7 @@ const deleteFollower = async (vacationId, userId) => {
         `DELETE FROM users_vacations WHERE vacationId = ${vacationId} && userId = ${userId}`
       );
     vacationsResult.success = true;
-    vacationsResult.data = deleteResult[0];
+    vacationsResult.data = deleteFollowerResult[0];
   } catch (error) {
     vacationsResult.data = error;
   }

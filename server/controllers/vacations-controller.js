@@ -111,7 +111,6 @@ vacationsRouter.delete(
   `${generalSetting.baseUrl}/vacations/:id`,
   async (req, res) => {
     const vacationIdToDelete = req.params.id;
-    console.log(vacationIdToDelete);
     const deleteResult = await vacationsBl.deleteVacation(vacationIdToDelete);
     if (!checkResultStatus(deleteResult)) {
       return res.status(500).send(deleteResult);

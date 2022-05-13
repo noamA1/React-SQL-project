@@ -21,7 +21,6 @@ const Modal = (props) => {
   };
 
   const onSubmiteHandler = (vacation) => {
-    console.log(vacation);
     socketObj.emit("send_message", {
       message: "Vacation was updated by the admin",
       time: new Date(),

@@ -21,7 +21,6 @@ const checkEmail = async (userEmail) => {
 };
 
 const postNewUser = async (newUser) => {
-  console.log(newUser);
   const respone = await fetch(`http://localhost:5000/api/users`, {
     method: "POST",
     headers: {

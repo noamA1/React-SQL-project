@@ -9,9 +9,6 @@ export const notifications = createSlice({
   name: "socket",
   initialState,
   reducers: {
-    // setNewMessage: (stae, actions) => {
-    //   stae.messageToSend = actions.payload;
-    // },
     addNotification: (state, action) => {
       state.messagesArray.push({
         message: action.payload.message,

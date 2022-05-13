@@ -36,7 +36,7 @@ export const vacationValidationSchema = Yup.object({
 export const dateDifference = (start, end) => {
   const diffInMs = new Date(end) - new Date(start);
   const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-  console.log(diffInDays);
+
   if (diffInDays < 1) {
     return false;
   } else {

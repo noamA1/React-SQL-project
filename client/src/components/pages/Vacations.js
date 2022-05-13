@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Alerts from "../../common/Alerts.js";
@@ -89,8 +89,7 @@ const Vacations = (props) => {
   };
 
   const deleteVacationHandler = (vacationId) => {
-    console.log(new Date());
-    // VacationsFunctions.deleteVacation(vacationId);
+    VacationsFunctions.deleteVacation(vacationId);
     dispatch(
       setAlert({
         type: "warning",

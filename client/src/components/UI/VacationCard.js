@@ -98,14 +98,21 @@ const VacationCard = (props) => {
               gutterBottom
               variant='h4'
               component='div'
-              sx={{ fontWeight: "700", fontStyle: "italic" }}
+              sx={{
+                fontWeight: "700",
+                fontStyle: "italic",
+                overflowWrap: "break-word",
+              }}
             >
               {destination}
             </Typography>
             <Typography
               variant='subtitle1'
               color='text.primery'
-              sx={{ fontWeight: "600" }}
+              sx={{
+                fontWeight: "600",
+                overflowWrap: "break-word",
+              }}
             >
               {description}
             </Typography>

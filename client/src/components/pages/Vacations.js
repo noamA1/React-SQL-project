@@ -36,10 +36,34 @@ const Vacations = (props) => {
     );
     setVacationsFolowersList(filteredUserVacationsList);
     setVacationsFolowers(followersCount);
-    setVacationsList(list);
+
+    sortVacations(list, filteredUserVacationsList);
     return () => {
       clearInterval(timer);
     };
+  };
+
+  const sortVacations = (vacations, userVacations) => {
+    let tempUserVacationsArray = [],
+      newVacationsArray = [];
+
+    vacations.forEach((vacation) => {
+      userVacations.forEach((userVacation) => {
+        if (vacation.id === userVacation.vacationId) {
+          tempUserVacationsArray.push(vacation);
+        }
+      });
+    });
+    newVacationsArray = [...tempUserVacationsArray];
+    vacations.forEach((v) => {
+      const temp = tempUserVacationsArray.find(
+        (element) => element.id === v.id
+      );
+      if (!temp) {
+        newVacationsArray.push(v);
+      }
+    });
+    setVacationsList(newVacationsArray);
   };
 
   const dismiss = useCallback(() => {

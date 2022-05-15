@@ -31,6 +31,7 @@ function App() {
         keys.TOKEN_SECRET
       );
       const currentUser = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
       setConnectedUser(currentUser);
       dispatch(signIn({ userInfo: { ...currentUser } }));
     }
@@ -53,9 +54,10 @@ function App() {
       </header>
       <main>
         <Routes>
-          {!user.isSignIn && !connectedUser && (
+          {(!user.isSignIn || connectedUser === null) && (
             <>
               <Route path='/auth' element={<AuthPage />} />
+              <Route path='*' element={<Navigate to='/auth' replace />} />
             </>
           )}
 
@@ -78,9 +80,9 @@ function App() {
               <Route path='*' element={<Navigate to='/vacations' replace />} />
             </>
           )}
-          {!user.isSignIn && (
+          {/* {!user.isSignIn && (
             <Route path='*' element={<Navigate to='/auth' replace />} />
-          )}
+          )} */}
         </Routes>
       </main>
     </div>

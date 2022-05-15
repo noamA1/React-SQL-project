@@ -35,6 +35,8 @@ const FormCard = (props) => {
   const [isLogin, setIsLogin] = useState(true);
   const [isExists, setIsExists] = useState({});
   const [cardTitle, setCardTitle] = useState("");
+  const [schema, setSchema] = useState({});
+  const [buttonText, setButtonText] = useState("");
   const [values, setValues] = useState({
     firstName: userInfo.firstName || "",
     lastName: userInfo.lastName || "",
@@ -42,12 +44,9 @@ const FormCard = (props) => {
     password: "",
     showPassword: false,
   });
-  const [schema, setSchema] = useState({});
-  const [buttonText, setButtonText] = useState("");
 
   useEffect(() => {
     console.log("-------- use effect for the title and button text -------");
-
     if (title === "Profile") {
       setIsLogin(false);
       setCardTitle("Your Profile");
@@ -81,7 +80,11 @@ const FormCard = (props) => {
   };
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+    let value = event.target.value;
+    if (prop === "email" || prop === "password") {
+      value = event.target.value.trim();
+    }
+    setValues({ ...values, [prop]: value });
   };
 
   const handleMouseDownPassword = (event) => {
@@ -105,7 +108,9 @@ const FormCard = (props) => {
     });
   };
 
-  const submitHandler = () => {
+  const submitHandler = (e) => {
+    e.preventDefault();
+
     if (title === "Profile" && !isLogin) {
       props.updateProfile(
         {

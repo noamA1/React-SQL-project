@@ -1,14 +1,11 @@
+import keys from "./config";
+import CryptoJS from "crypto-js";
+
 const getUser = async (userEmail, userPassword) => {
   const respone = await fetch(
     `http://localhost:5000/api/users/${userEmail}/${userPassword}`
   );
 
-  const data = await respone.json();
-  return data;
-};
-
-const getNewToken = async (email) => {
-  const respone = await fetch(`http://localhost:5000/api/getToken/${email}`);
   const data = await respone.json();
   return data;
 };
@@ -21,15 +18,19 @@ const checkEmail = async (userEmail) => {
 };
 
 const postNewUser = async (newUser) => {
-  const respone = await fetch(`http://localhost:5000/api/users`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newUser),
-  });
-  const data = await respone.json();
-  return data;
+  try {
+    const respone = await fetch(`http://localhost:5000/api/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...newUser }),
+    });
+    const data = await respone.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const updateUser = async (updatedUser, userId) => {
@@ -44,4 +45,20 @@ const updateUser = async (updatedUser, userId) => {
   return data;
 };
 
-export { getUser, postNewUser, checkEmail, updateUser, getNewToken };
+const setUserInSessionStorage = (user) => {
+  const encryptedUserData = CryptoJS.AES.encrypt(
+    JSON.stringify({ ...user }),
+    keys.TOKEN_SECRET
+  ).toString();
+  sessionStorage.removeItem("connected-user");
+
+  sessionStorage.setItem("connected-user", encryptedUserData);
+};
+
+export {
+  getUser,
+  postNewUser,
+  checkEmail,
+  updateUser,
+  setUserInSessionStorage,
+};

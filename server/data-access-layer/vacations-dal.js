@@ -35,7 +35,7 @@ const getAllFollowers = async () => {
   try {
     let followersResult = await connection
       .promise()
-      .query(`SELECT *  FROM users_vacations`);
+      .query(`SELECT * FROM users_vacations`);
     vacationsResult.success = true;
     vacationsResult.data = followersResult[0];
   } catch (error) {
@@ -47,8 +47,8 @@ const getAllFollowers = async () => {
 const getNumOfVactoinsFollowers = async () => {
   try {
     let followersResult = await connection.promise()
-      .query(`SELECT vacationId, userId, COUNT(userId) AS followers  FROM users_vacations
-        GROUP BY vacationId`);
+      .query(`SELECT vacationId, COUNT(userId) AS followers FROM users_vacations
+      GROUP BY vacationId`);
     vacationsResult.success = true;
     vacationsResult.data = followersResult[0];
   } catch (error) {

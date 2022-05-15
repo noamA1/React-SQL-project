@@ -8,7 +8,7 @@ import CircularProgressWithLabel from "../UI/CircularProgressWithLabel.js";
 const Home = () => {
   const [vacationsList, setVacationsList] = useState([]);
   const [vacationsFolowers, setVacationsFolowers] = useState([]);
-  const [cahrtData, setCahrtData] = useState(null);
+  const [chartData, setChartData] = useState(null);
   const [progress, setProgress] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,10 +35,10 @@ const Home = () => {
 
   useEffect(() => {
     if (vacationsList.length > 0 && vacationsFolowers.length > 0) {
-      const tempCahrtData = setDataset(vacationsList, vacationsFolowers);
-      setCahrtData(tempCahrtData);
+      const tempChartData = setDataset(vacationsList, vacationsFolowers);
+      setChartData(tempChartData);
     }
-    if (cahrtData !== null && progress >= 100) {
+    if (progress >= 100) {
       setIsLoading(false);
     }
   }, [vacationsList, vacationsFolowers, progress]);
@@ -49,11 +49,11 @@ const Home = () => {
       {isLoading && <CircularProgressWithLabel value={progress} />}
       {vacationsList.length > 0 && !isLoading && (
         <Container>
-          {cahrtData !== null && <Bar options={options} data={cahrtData} />}
+          {chartData !== null && <Bar options={options} data={chartData} />}
         </Container>
       )}
 
-      {!isLoading && (vacationsList.length === 0 || vacationsList === null) && (
+      {!isLoading && chartData === null && (
         <Box
           sx={{
             width: 500,

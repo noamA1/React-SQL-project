@@ -56,17 +56,9 @@ const VacationCard = (props) => {
     const findVacation = props.usersVacations.find(
       (vacationUser) => vacationUser.vacationId === id
     );
+
     findVacation ? setIsFollow(true) : setIsFollow(false);
   }, [props.usersVacations, id, isFollow]);
-
-  if (
-    image.includes("some") ||
-    image.includes("image") ||
-    image.includes("images1") ||
-    image.includes("arrow-right")
-  ) {
-    image = "";
-  }
 
   const deleteHandler = () => {
     props.onDelete(id);
@@ -82,7 +74,15 @@ const VacationCard = (props) => {
 
   return (
     <>
-      <Card key={`vacation-card-${id}`} sx={{ width: 400 }}>
+      <Card
+        key={`vacation-card-${id}`}
+        sx={{
+          maxWidth: 400,
+          borderRadius: "10px",
+          boxShadow: "12px 10px #f1f3f5",
+          backgroundColor: "#fffae399",
+        }}
+      >
         <CardActionArea>
           {image !== "" && (
             <CardMedia
@@ -135,7 +135,7 @@ const VacationCard = (props) => {
               alignItems: "center",
             }}
           >
-            <Typography sx={{ fontSize: 23, fontWeight: 700 }}>
+            <Typography sx={{ fontSize: 23, fontWeight: 700, ml: "5px" }}>
               {vacationFollowers.followers}
             </Typography>
             {!isAdmin && (

@@ -20,6 +20,8 @@ import { clearNotifications } from "../../stateManagement/notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ManageAccountsSharpIcon from "@mui/icons-material/ManageAccountsSharp";
 import moment from "moment";
+import Alerts from "../../common/Alerts";
+import { dismissAlert } from "../../stateManagement/alert";
 
 const pages = ["Home", "Add-Vacation"];
 const settings = ["Profile", "Logout"];
@@ -27,24 +29,30 @@ const settings = ["Profile", "Logout"];
 const MainNavigation = (props) => {
   const user = useSelector((state) => state.user);
   const notifications = useSelector((state) => state.notifications);
+  const notificationAlert = useSelector((state) => state.alert);
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElNotification, setAnchorElNotification] = useState(null);
   const [notificationsArray, setNotificationsArray] = useState(
     notifications.messagesArray
   );
-
+  const [alertType, setAlertType] = useState(null);
   const [userFullName, setUserFullName] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const navigate = useNavigate();
-
-  const setNotifications = useCallback(() => {}, []);
+  const dismiss = useCallback(() => {
+    setTimeout(() => {
+      dispatch(dismissAlert());
+    }, 5000);
+  }, [dispatch]);
 
   useEffect(() => {
     setNotificationsArray(notifications.messagesArray);
-  }, [setNotifications, notifications.messagesArray, setNotificationsArray]);
+  }, [notifications.messagesArray, setNotificationsArray]);
 
   useEffect(() => {
     setUserFullName(user.fullName);
@@ -52,6 +60,29 @@ const MainNavigation = (props) => {
       setIsAdmin(true);
     }
   }, [user.fullName, user.userInfo.role]);
+
+  useEffect(() => {
+    if (notificationAlert.isShow && user.isSignIn) {
+      switch (notificationAlert.type) {
+        case "success":
+          setAlertType(Alerts.successAlert(notificationAlert.message));
+          break;
+        case "warning":
+          setAlertType(Alerts.warningAlert(notificationAlert.message));
+          break;
+        default:
+          setAlertType(Alerts.infoAlert(notificationAlert.message));
+          break;
+      }
+      dismiss();
+    }
+  }, [
+    notificationAlert.isShow,
+    notificationAlert.type,
+    setAlertType,
+    dismiss,
+    notificationAlert.message,
+  ]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -93,224 +124,229 @@ const MainNavigation = (props) => {
   };
 
   return (
-    <AppBar
-      position='sticky'
-      sx={{
-        backgroundImage:
-          "linear-gradient(90deg, rgba(59,201,219,1) 0%, rgba(50,171,135,1) 100%)",
-        top: 0,
-      }}
-    >
-      <Container maxWidth='xl'>
-        <Toolbar disableGutters>
-          <Typography
-            variant='h6'
-            noWrap
-            component='div'
-            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-          >
-            Vacations Net
-          </Typography>
-          {user.isSignIn && (
-            <>
-              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-                <IconButton
-                  size='large'
-                  aria-label='account of current user'
-                  aria-controls='menu-appbar'
-                  aria-haspopup='true'
-                  onClick={handleOpenNavMenu}
-                  color='inherit'
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id='menu-appbar'
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                  sx={{
-                    display: { xs: "block", md: "none" },
-                  }}
-                >
+    <>
+      <AppBar
+        position='sticky'
+        sx={{
+          backgroundImage:
+            "linear-gradient(90deg, rgba(59,201,219,1) 0%, rgba(50,171,135,1) 100%)",
+          top: 0,
+        }}
+      >
+        <Container maxWidth='xl'>
+          <Toolbar disableGutters>
+            <Typography
+              variant='h6'
+              noWrap
+              component='div'
+              sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            >
+              Vacations Net
+            </Typography>
+            {user.isSignIn && (
+              <>
+                <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+                  <IconButton
+                    size='large'
+                    aria-label='account of current user'
+                    aria-controls='menu-appbar'
+                    aria-haspopup='true'
+                    onClick={handleOpenNavMenu}
+                    color='inherit'
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    id='menu-appbar'
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                    sx={{
+                      display: { xs: "block", md: "none" },
+                    }}
+                  >
+                    {isAdmin &&
+                      pages.map((page) => (
+                        <MenuItem
+                          key={page}
+                          onClick={() => {
+                            navigateToHandler(page);
+                          }}
+                        >
+                          <Typography textAlign='center'>{page}</Typography>
+                        </MenuItem>
+                      ))}
+                    <MenuItem
+                      key={"Vacations"}
+                      onClick={() => {
+                        navigateToHandler("Vacations");
+                      }}
+                    >
+                      <Typography textAlign='center'>Vacations</Typography>
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              </>
+            )}
+
+            <Typography
+              variant='h6'
+              noWrap
+              component='div'
+              sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+            >
+              Vacations Net
+            </Typography>
+            {user.isSignIn && (
+              <>
+                <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                   {isAdmin &&
                     pages.map((page) => (
-                      <MenuItem
+                      <Button
                         key={page}
                         onClick={() => {
                           navigateToHandler(page);
                         }}
+                        sx={{ my: 2, color: "white", display: "block" }}
                       >
-                        <Typography textAlign='center'>{page}</Typography>
-                      </MenuItem>
+                        {page}
+                      </Button>
                     ))}
-                  <MenuItem
+                  <Button
                     key={"Vacations"}
                     onClick={() => {
                       navigateToHandler("Vacations");
                     }}
+                    sx={{ my: 2, color: "white", display: "block" }}
                   >
-                    <Typography textAlign='center'>Vacations</Typography>
-                  </MenuItem>
-                </Menu>
-              </Box>
-            </>
-          )}
+                    Vacations
+                  </Button>
+                </Box>
 
-          <Typography
-            variant='h6'
-            noWrap
-            component='div'
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-          >
-            Vacations Net
-          </Typography>
-          {user.isSignIn && (
-            <>
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                {isAdmin &&
-                  pages.map((page) => (
-                    <Button
-                      key={page}
-                      onClick={() => {
-                        navigateToHandler(page);
-                      }}
-                      sx={{ my: 2, color: "white", display: "block" }}
+                <Box sx={{ flexGrow: 0 }}>
+                  <Tooltip title='Open notifications'>
+                    <IconButton
+                      onClick={handleOpenNotificationsMenu}
+                      sx={{ mr: 3, p: 0 }}
+                      color='inherit'
                     >
-                      {page}
-                    </Button>
-                  ))}
-                <Button
-                  key={"Vacations"}
-                  onClick={() => {
-                    navigateToHandler("Vacations");
-                  }}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  Vacations
-                </Button>
-              </Box>
-
-              <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title='Open notifications'>
-                  <IconButton
-                    onClick={handleOpenNotificationsMenu}
-                    sx={{ mr: 3, p: 0 }}
-                    color='inherit'
-                  >
-                    <Badge
-                      badgeContent={
-                        notificationsArray ? notificationsArray.length : 0
-                      }
-                      color='error'
-                    >
-                      <NotificationsIcon sx={{ fontSize: 27 }} />
-                    </Badge>
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: "33px", height: "auto" }}
-                  id='menu-appbar'
-                  anchorEl={anchorElNotification}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorElNotification)}
-                  onClose={handleCloseNotificationsMenu}
-                >
-                  {notificationsArray.map((notification, index) => (
-                    <MenuItem
-                      key={`notification-${index}`}
-                      onClick={() => {
-                        handleCloseNotificationsMenu();
-                        dispatch(clearNotifications());
-                      }}
-                      sx={{ position: "relative", height: "40px" }}
-                    >
-                      <Typography textAlign='center'>
-                        {notification.message}
-                      </Typography>
-                      <Typography
-                        variant='caption'
-                        display='block'
-                        position='absolute'
-                        top='24px'
-                        left='15px'
-                        color='text.secondary'
-                        mb='4px'
+                      <Badge
+                        badgeContent={
+                          notificationsArray ? notificationsArray.length : 0
+                        }
+                        color='error'
                       >
-                        {moment(notification.timeStemp)
-                          .startOf("minutes")
-                          .fromNow()}
-                      </Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-
-                <Tooltip title='Open settings'>
-                  <IconButton
-                    onClick={handleOpenUserMenu}
-                    sx={{ p: 0 }}
-                    color='inherit'
+                        <NotificationsIcon sx={{ fontSize: 27 }} />
+                      </Badge>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: "33px", height: "auto" }}
+                    id='menu-appbar'
+                    anchorEl={anchorElNotification}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorElNotification)}
+                    onClose={handleCloseNotificationsMenu}
                   >
-                    <AccountCircle sx={{ fontSize: 33 }} />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: "33px" }}
-                  id='menu-appbar'
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  <MenuItem>Welcom back! {userFullName}</MenuItem>
-                  <Divider />
-                  {settings.map((setting) => (
-                    <MenuItem
-                      key={setting}
-                      onClick={() => {
-                        userMenuHandler(setting.toLowerCase());
-                      }}
-                    >
-                      {setting === "Logout" && <LogoutIcon sx={{ mr: 1.5 }} />}
-                      {setting === "Profile" && (
-                        <ManageAccountsSharpIcon sx={{ mr: 1.5 }} />
-                      )}
+                    {notificationsArray.map((notification, index) => (
+                      <MenuItem
+                        key={`notification-${index}`}
+                        onClick={() => {
+                          handleCloseNotificationsMenu();
+                          dispatch(clearNotifications());
+                        }}
+                        sx={{ position: "relative", height: "40px" }}
+                      >
+                        <Typography textAlign='center'>
+                          {notification.message}
+                        </Typography>
+                        <Typography
+                          variant='caption'
+                          display='block'
+                          position='absolute'
+                          top='24px'
+                          left='15px'
+                          color='text.secondary'
+                          mb='4px'
+                        >
+                          {moment(notification.timeStemp)
+                            .startOf("minutes")
+                            .fromNow()}
+                        </Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
 
-                      <Typography textAlign='center'>{setting}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-            </>
-          )}
-        </Toolbar>
-      </Container>
-    </AppBar>
+                  <Tooltip title='Open settings'>
+                    <IconButton
+                      onClick={handleOpenUserMenu}
+                      sx={{ p: 0 }}
+                      color='inherit'
+                    >
+                      <AccountCircle sx={{ fontSize: 33 }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: "33px" }}
+                    id='menu-appbar'
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    <MenuItem>Welcom back! {userFullName}</MenuItem>
+                    <Divider />
+                    {settings.map((setting) => (
+                      <MenuItem
+                        key={setting}
+                        onClick={() => {
+                          userMenuHandler(setting.toLowerCase());
+                        }}
+                      >
+                        {setting === "Logout" && (
+                          <LogoutIcon sx={{ mr: 1.5 }} />
+                        )}
+                        {setting === "Profile" && (
+                          <ManageAccountsSharpIcon sx={{ mr: 1.5 }} />
+                        )}
+
+                        <Typography textAlign='center'>{setting}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
+              </>
+            )}
+          </Toolbar>
+        </Container>
+      </AppBar>
+      {notificationAlert.isShow && alertType}
+    </>
   );
 };
 

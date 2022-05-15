@@ -1,23 +1,19 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Alerts from "../../common/Alerts.js";
 import VacationsFunctions from "../../common/VacationsFunctions.js";
-import { dismissAlert, setAlert } from "../../stateManagement/alert.js";
+import { setAlert } from "../../stateManagement/alert.js";
 import CircularProgressWithLabel from "../UI/CircularProgressWithLabel.js";
 import VacationCard from "../UI/VacationCard";
 
 const Vacations = (props) => {
   const socket = props.socketObj;
   const dispatch = useDispatch();
-  const notificationAlert = useSelector((state) => state.alert);
   const [vacationsList, setVacationsList] = useState([]);
   const [vacationsFolowers, setVacationsFolowers] = useState([]);
   const [vacationsFolowersList, setVacationsFolowersList] = useState([]);
   const [progress, setProgress] = useState(25);
   const [isLoading, setIsLoading] = useState(true);
-
-  const [alertType, setAlertType] = useState(null);
   const user = useSelector((state) => state.user);
 
   const getVacationsList = async () => {
@@ -32,7 +28,7 @@ const Vacations = (props) => {
       await VacationsFunctions.getVacationsFollowersCount();
     const listOfAllFollowers = await VacationsFunctions.getVacationsFollowers();
     const filteredUserVacationsList = listOfAllFollowers.filter(
-      (follower) => follower.userId === user.userId
+      (follower) => follower.userId === user.userInfo.id
     );
     setVacationsFolowersList(filteredUserVacationsList);
     setVacationsFolowers(followersCount);
@@ -66,12 +62,6 @@ const Vacations = (props) => {
     setVacationsList(newVacationsArray);
   };
 
-  const dismiss = useCallback(() => {
-    setTimeout(() => {
-      dispatch(dismissAlert());
-    }, 5000);
-  }, [dispatch]);
-
   useEffect(() => {
     getVacationsList();
     if (vacationsList !== null && progress >= 100) {
@@ -79,36 +69,13 @@ const Vacations = (props) => {
     }
   }, [vacationsList, progress]);
 
-  useEffect(() => {
-    if (notificationAlert.isShow) {
-      switch (notificationAlert.type) {
-        case "success":
-          setAlertType(Alerts.successAlert(notificationAlert.message));
-          break;
-        case "warning":
-          setAlertType(Alerts.warningAlert(notificationAlert.message));
-          break;
-        default:
-          setAlertType(Alerts.infoAlert(notificationAlert.message));
-          break;
-      }
-      dismiss();
-    }
-  }, [
-    notificationAlert.isShow,
-    notificationAlert.type,
-    setAlertType,
-    dismiss,
-    notificationAlert.message,
-  ]);
-
   const followEventHandler = (id) => {
-    VacationsFunctions.addFollower(user.userId, id);
+    VacationsFunctions.addFollower(user.userInfo.id, id);
     getVacationsList();
   };
 
   const unFollowHandler = (vacationId) => {
-    VacationsFunctions.removeFollower(user.userId, vacationId);
+    VacationsFunctions.removeFollower(user.userInfo.id, vacationId);
     getVacationsList();
   };
 
@@ -129,7 +96,6 @@ const Vacations = (props) => {
 
   return (
     <>
-      {notificationAlert.isShow && alertType}
       <h1>Our Vacations</h1>
       {isLoading && <CircularProgressWithLabel value={progress} />}
       {!isLoading && vacationsList.length > 0 && (
@@ -145,7 +111,6 @@ const Vacations = (props) => {
               <Grid item key={`vacation-${vacation.id}`}>
                 <VacationCard
                   item={vacation}
-                  userId={user.userId}
                   followers={vacationsFolowers}
                   addFollower={followEventHandler}
                   unFollow={unFollowHandler}
@@ -159,7 +124,7 @@ const Vacations = (props) => {
         </Grid>
       )}
 
-      {!isLoading && vacationsList === null && (
+      {!isLoading && vacationsList.length === 0 && (
         <Box
           sx={{
             width: 500,

@@ -1,8 +1,9 @@
-import { Alert } from "@mui/material";
+import { Alert, AlertTitle } from "@mui/material";
 
 const successAlert = (message) => {
   return (
-    <Alert variant='outlined' severity='success'>
+    <Alert severity='success'>
+      <AlertTitle>Success</AlertTitle>
       {message}
     </Alert>
   );
@@ -10,7 +11,8 @@ const successAlert = (message) => {
 
 const errorAlert = (message) => {
   return (
-    <Alert variant='outlined' severity='error'>
+    <Alert severity='error'>
+      <AlertTitle>Error</AlertTitle>
       {message}
     </Alert>
   );
@@ -18,7 +20,8 @@ const errorAlert = (message) => {
 
 const infoAlert = (message) => {
   return (
-    <Alert variant='outlined' severity='info'>
+    <Alert severity='info'>
+      <AlertTitle>Info</AlertTitle>
       {message}
     </Alert>
   );
@@ -26,7 +29,8 @@ const infoAlert = (message) => {
 
 const warningAlert = (message) => {
   return (
-    <Alert variant='outlined' severity='warning'>
+    <Alert severity='warning'>
+      <AlertTitle>Warning</AlertTitle>
       {message}
     </Alert>
   );

@@ -34,17 +34,20 @@ usersRouter.get(
       req.params.pass,
       generalSetting.CRYPTOJS_KEY
     ).toString();
+    try {
+      const getUserResult = await usersBl.getUserBy(email);
 
-    const getUserResult = await usersBl.getUserBy(email);
-
-    if (!checkResultStatus(getUserResult)) {
-      return res.status(500).send(getUserResult);
-    } else {
-      if (checkPassword(password, getUserResult.data[0].password)) {
-        return res.send(getUserResult.data);
+      if (!checkResultStatus(getUserResult)) {
+        return res.status(500).send(getUserResult);
       } else {
-        return res.json("Invalid Credentials");
+        if (checkPassword(password, getUserResult.data[0].password)) {
+          return res.send(getUserResult.data);
+        } else {
+          return res.json("Invalid Credentials");
+        }
       }
+    } catch (error) {
+      return res.json("Invalid Credentials");
     }
   }
 );

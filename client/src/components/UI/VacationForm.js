@@ -24,6 +24,8 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const VacationForm = (props) => {
+  const navigate = useNavigate();
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [values, setValues] = useState({
     destination: (props.vacation && props.vacation.destination) || "",
@@ -33,8 +35,6 @@ const VacationForm = (props) => {
     endDate: (props.vacation && props.vacation.endDate) || null,
     image: (props.vacation && props.vacation.image) || "",
   });
-  const navigate = useNavigate();
-
   const [datesAndImageErrors, setDatesAndImageErrors] = useState({
     startDateError: false,
     endDateError: false,
@@ -350,11 +350,12 @@ const VacationForm = (props) => {
                 }}
                 size='large'
                 disabled={
-                  !isValid ||
-                  !dirty ||
-                  datesAndImageErrors.startDateError ||
-                  datesAndImageErrors.endDateError ||
-                  datesAndImageErrors.imageError
+                  (!isValid ||
+                    !dirty ||
+                    datesAndImageErrors.startDateError ||
+                    datesAndImageErrors.endDateError ||
+                    datesAndImageErrors.imageError) &&
+                  !isEditMode
                 }
               >
                 {!isEditMode ? "Add Vacation" : "Edit vacation"}

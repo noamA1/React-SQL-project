@@ -3,7 +3,6 @@ const initialState = {
   isSignIn: false,
   fullName: "",
   userInfo: {},
-  userId: "",
 };
 export const userSlice = createSlice({
   name: "user",
@@ -11,10 +10,11 @@ export const userSlice = createSlice({
   reducers: {
     updateInfo: (state, action) => {
       state.userInfo = {
-        id: action.payload.userInfo.id,
+        id: action.payload.id,
         firstName: action.payload.userInfo.firstName,
         lastName: action.payload.userInfo.lastName,
         email: action.payload.userInfo.email,
+        role: state.userInfo.role,
       };
       state.fullName = `${state.userInfo.firstName} ${state.userInfo.lastName}`;
     },
@@ -28,7 +28,6 @@ export const userSlice = createSlice({
         role: action.payload.userInfo.role,
       };
       state.fullName = `${state.userInfo.firstName} ${state.userInfo.lastName}`;
-      state.userId = action.payload.userInfo.id;
     },
 
     signOut: () => initialState,

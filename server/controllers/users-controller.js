@@ -3,6 +3,8 @@ import usersBl from "../business-logic/users-bl.js";
 import generalSetting from "../common/config.js";
 import { checkPassword, checkResultStatus } from "../common/helper.js";
 import CryptoJS from "crypto-js";
+import fetch from "node-fetch";
+import axios from "axios";
 
 const usersRouter = express.Router();
 
@@ -82,5 +84,23 @@ usersRouter.put(`${generalSetting.baseUrl}/users/:id`, async (req, res) => {
     return res.send(updateResult.data);
   }
 });
+
+usersRouter.post(
+  `${generalSetting.baseUrl}/verify-recapcha`,
+  async (req, res) => {
+    const body = { ...req.body };
+    const response = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${body.secret}&response=${body.response}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    return res.send(data);
+  }
+);
 
 export default usersRouter;

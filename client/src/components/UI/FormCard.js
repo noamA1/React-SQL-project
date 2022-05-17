@@ -10,14 +10,14 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-
+import ReCaptchaV2 from "react-google-recaptcha";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useEffect, useState } from "react";
 
 import classes from "./FormCard.module.css";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { checkEmail } from "../../common/userActions";
+import { checkEmail, checkReCapchaToken } from "../../common/userActions";
 import { useSelector } from "react-redux";
 import {
   loginValidationSchema,
@@ -43,6 +43,7 @@ const FormCard = (props) => {
     email: userInfo.email || "",
     password: "",
     showPassword: false,
+    isVerify: false,
   });
 
   useEffect(() => {
@@ -125,13 +126,32 @@ const FormCard = (props) => {
       props.onLogIn(values.email, values.password);
     }
     if (!isLogin && title !== "Profile") {
-      props.onRegister({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email.toLowerCase(),
-        password: values.password,
+      // props.onRegister({
+      //   firstName: values.firstName,
+      //   lastName: values.lastName,
+      //   email: values.email.toLowerCase(),
+      //   password: values.password,
+      // });
+      console.log(values);
+    }
+  };
+
+  const handleToken = async (token) => {
+    const checkToken = await checkReCapchaToken(token);
+    console.log(checkToken);
+    if (checkToken.success) {
+      setValues({
+        ...values,
+        isVerify: true,
       });
     }
+  };
+
+  const handleExpired = () => {
+    setValues({
+      ...values,
+      isVerify: false,
+    });
   };
 
   return (
@@ -290,7 +310,13 @@ const FormCard = (props) => {
                       </Button>
                     </>
                   )}
-
+                  {buttonText === "Register" && (
+                    <ReCaptchaV2
+                      sitekey={process.env.REACT_APP_SITE_KEY}
+                      onChange={handleToken}
+                      onExpired={handleExpired}
+                    />
+                  )}
                   <CardActions sx={{ justifyContent: "center" }}>
                     <Button
                       type='submit'
@@ -300,7 +326,10 @@ const FormCard = (props) => {
                         backgroundColor: "#22b8cf",
                         ":hover": { backgroundColor: "#66d9e8" },
                       }}
-                      disabled={(!isValid || !dirty) && title !== "Profile"}
+                      disabled={
+                        (!isValid || !dirty || !values.isVerify) &&
+                        title !== "Profile"
+                      }
                       onClick={submitHandler}
                     >
                       {buttonText === "Register" && (

@@ -55,10 +55,31 @@ const setUserInSessionStorage = (user) => {
   sessionStorage.setItem("connected-user", encryptedUserData);
 };
 
+const checkReCapchaToken = async (token) => {
+  const responeFromGoogle = await fetch(
+    `http://localhost:5000/api/verify-recapcha`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        secret: process.env.REACT_APP_SECRET_KEY,
+        response: token,
+      }),
+    }
+  );
+  // console.log(responeFromGoogle);
+  const data = await responeFromGoogle.json();
+  console.log(data);
+  return data;
+};
+
 export {
   getUser,
   postNewUser,
   checkEmail,
   updateUser,
   setUserInSessionStorage,
+  checkReCapchaToken,
 };

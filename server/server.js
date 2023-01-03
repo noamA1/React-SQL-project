@@ -28,12 +28,10 @@ io.on("connection", (socket) => {
 app.use("/", usersRouter);
 app.use("/", vacationsRouter);
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
+app.listen(generalSetting.port, () => {
   console.log(`server is running on port ${PORT} localhost!`);
 });
 
-server.listen($PORT || generalSetting.socketServerPort, () => {
+server.listen(generalSetting.socketServerPort, () => {
   console.log("SERVER IS RUNNING");
 });

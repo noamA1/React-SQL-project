@@ -8,11 +8,11 @@ import mysql from "mysql2";
 //   timezone: "Z",
 // });
 const connection = mysql.createConnection({
-  database: "",
-  host: "",
-  user: "",
-  password: "",
-  port: "",
+  database: process.env.MYSQLDATABASE,
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  port: process.env.MYSQLPORT,
   timezone: "Z",
 });
 

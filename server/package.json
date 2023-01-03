@@ -2,9 +2,9 @@
   "name": "project-3",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "server.js"
+    "start": "index.js"
   },
   "type": "module",
   "author": "Noam",

@@ -28,8 +28,8 @@ io.on("connection", (socket) => {
 app.use("/", usersRouter);
 app.use("/", vacationsRouter);
 
-app.listen($PORT || generalSetting.port, () => {
-  console.log(`server is running on port ${generalSetting.port} localhost!`);
+app.listen($PORT, () => {
+  console.log(`server is running on port ${$PORT} localhost!`);
 });
 
 server.listen($PORT || generalSetting.socketServerPort, () => {

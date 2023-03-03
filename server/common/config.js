@@ -1,6 +1,7 @@
 const generalSetting = {
   port: process.env.PORT || 5000,
-  socketServerPort: process.env.PORT + 1 || 5001,
+  // socketServerPort: process.env.PORT + 1 || 5001,
+  socketServerPort: process.env.PORT || 5001,
   baseUrl: "/api",
 
   CRYPTOJS_KEY:

@@ -2,16 +2,14 @@ import keys from "./config";
 import CryptoJS from "crypto-js";
 
 const getUser = async (userEmail, userPassword) => {
-  const respone = await fetch(
-    `http://localhost:5000/api/users/${userEmail}/${userPassword}`
-  );
+  const respone = await fetch(`${keys.url}/users/${userEmail}/${userPassword}`);
 
   const data = await respone.json();
   return data;
 };
 
 const checkEmail = async (userEmail) => {
-  const respone = await fetch(`http://localhost:5000/api/users/${userEmail}`);
+  const respone = await fetch(`${keys.url}/users/${userEmail}`);
 
   const data = await respone.json();
   return data;
@@ -19,7 +17,7 @@ const checkEmail = async (userEmail) => {
 
 const postNewUser = async (newUser) => {
   try {
-    const respone = await fetch(`http://localhost:5000/api/users`, {
+    const respone = await fetch(`${keys.url}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +32,7 @@ const postNewUser = async (newUser) => {
 };
 
 const updateUser = async (updatedUser, userId) => {
-  const respone = await fetch(`http://localhost:5000/api/users/${userId}`, {
+  const respone = await fetch(`${keys.url}/users/${userId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

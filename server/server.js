@@ -29,7 +29,7 @@ app.use("/", usersRouter);
 app.use("/", vacationsRouter);
 
 app.listen(generalSetting.port, () => {
-  console.log(`server is running on port ${generalSetting.port} localhost!`);
+  console.log(`server is running on port ${generalSetting.port}`);
 });
 
 server.listen(generalSetting.socketServerPort, () => {

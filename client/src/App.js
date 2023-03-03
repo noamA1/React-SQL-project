@@ -14,7 +14,8 @@ import { signIn } from "./stateManagement/user";
 import CryptoJS from "crypto-js";
 import keys from "./common/config";
 
-const socket = io.connect("http://localhost:5001");
+// const socket = io.connect("http://localhost:5001");
+// const socket = io.connect(`${keys.url}`);
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -37,20 +38,21 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    socket.on("receive_message", (data) => {
-      if (data.message !== undefined) {
-        dispatch(
-          addNotification({ message: data.message, timeStemp: data.time })
-        );
-      }
-    });
-  }, [dispatch]);
+  // useEffect(() => {
+  //   socket.on("receive_message", (data) => {
+  //     if (data.message !== undefined) {
+  //       dispatch(
+  //         addNotification({ message: data.message, timeStemp: data.time })
+  //       );
+  //     }
+  //   });
+  // }, [dispatch]);
 
   return (
     <div className='App'>
       <header style={{ position: "sticky", top: 0, zIndex: 10 }}>
-        <MainNavigation socketObj={socket} />
+        {/* <MainNavigation socketObj={socket} /> */}
+        <MainNavigation />
       </header>
       <main>
         <Routes>
@@ -63,17 +65,19 @@ function App() {
 
           {user.isSignIn && (
             <>
-              <Route
+              {/* <Route
                 path='/vacations'
                 element={<Vacations socketObj={socket} />}
-              />
+              /> */}
+              <Route path='/vacations' element={<Vacations />} />
               {user.userInfo.role === "admin" && (
                 <>
                   <Route path='/home' element={<Home />} />
-                  <Route
+                  {/* <Route
                     path='/add-vacation'
                     element={<AddVacation socketObj={socket} />}
-                  />
+                  /> */}
+                  <Route path='/add-vacation' element={<AddVacation />} />
                 </>
               )}
               <Route path='/profile' element={<Profile />} />

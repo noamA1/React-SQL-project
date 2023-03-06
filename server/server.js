@@ -21,7 +21,7 @@ const io = new Server(server, {
   },
 });
 
-io.listen(generalSetting.socketServerPort);
+// io.listen(generalSetting.socketServerPort);
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);

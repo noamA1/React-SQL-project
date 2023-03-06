@@ -34,6 +34,7 @@ app.listen(generalSetting.port, () => {
   console.log(`server is running on port ${generalSetting.port}`);
 });
 
-io.listen(generalSetting.socketServerPort, () => {
-  console.log(`SERVER IS RUNNING ON PORT ${generalSetting.socketServerPort}`);
-});
+// io.listen(generalSetting.socketServerPort, () => {
+//   console.log(`SERVER IS RUNNING ON PORT ${generalSetting.socketServerPort}`);
+// });
+io.listen(generalSetting.socketServerPort);

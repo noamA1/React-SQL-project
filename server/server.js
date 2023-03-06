@@ -5,19 +5,20 @@ import usersRouter from "./controllers/users-controller.js";
 import vacationsRouter from "./controllers/vacations-controller.js";
 import http from "http";
 import { Server } from "socket.io";
+const io = require("socket.io")();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 
-const io = new Server(server, {
-  cors: {
-    origin: `http://localhost:3000`,
-    methods: ["GET", "POST", "PUT"],
-  },
-});
+// const io = new Server(server, {
+//   cors: {
+//     origin: `http://localhost:3000`,
+//     methods: ["GET", "POST", "PUT"],
+//   },
+// });
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
@@ -32,6 +33,6 @@ app.listen(generalSetting.port, () => {
   console.log(`server is running on port ${generalSetting.port}`);
 });
 
-server.listen(generalSetting.socketServerPort + 1, () => {
+server.listen(generalSetting.socketServerPort, () => {
   console.log("SERVER IS RUNNING");
 });

@@ -6,7 +6,7 @@ import vacationsRouter from "./controllers/vacations-controller.js";
 import http from "http";
 import { Server } from "socket.io";
 
-const io = new Server();
+// const io = new Server();
 
 const app = express();
 app.use(express.json());
@@ -14,12 +14,12 @@ app.use(cors());
 
 // const server = http.createServer(app);
 
-// const io = new Server(server, {
-//   cors: {
-//     origin: `http://localhost:3000`,
-//     methods: ["GET", "POST", "PUT"],
-//   },
-// });
+const io = new Server(server, {
+  cors: {
+    origin: `http://localhost:3000`,
+    methods: ["GET", "POST", "PUT"],
+  },
+});
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);

@@ -5,7 +5,8 @@ import usersRouter from "./controllers/users-controller.js";
 import vacationsRouter from "./controllers/vacations-controller.js";
 import http from "http";
 import { Server } from "socket.io";
-const io = require("socket.io")();
+
+const io = new Server();
 
 const app = express();
 app.use(express.json());

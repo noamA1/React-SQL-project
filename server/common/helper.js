@@ -45,4 +45,4 @@ const storage = multer.diskStorage({
 });
 
 // export const upload = multer({ storage });
-export const upload = multer({ dest: "http://localhost:3000/assets" });
+export const upload = multer({ dest: "http://localhost:3000/api/assets" });

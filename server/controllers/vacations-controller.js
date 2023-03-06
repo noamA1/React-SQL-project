@@ -137,7 +137,8 @@ vacationsRouter.post(
   `${generalSetting.baseUrl}/vacation-image`,
   upload.single("file"),
   (req, res) => {
-    res.json({ url: `${upload.getDestination}` + upload.getFilename });
+    // res.json({ url: `${upload.getDestination}` + upload.getFilename });
+    res.status(200).send(req.file);
   }
 );
 

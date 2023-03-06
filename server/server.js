@@ -32,6 +32,6 @@ app.listen(generalSetting.port, () => {
   console.log(`server is running on port ${generalSetting.port}`);
 });
 
-server.listen(generalSetting.socketServerPort, () => {
+server.listen(generalSetting.socketServerPort + 1, () => {
   console.log("SERVER IS RUNNING");
 });

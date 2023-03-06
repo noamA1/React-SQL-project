@@ -21,6 +21,8 @@ const io = new Server(server, {
   },
 });
 
+io.listen(generalSetting.socketServerPort);
+
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
   socket.on("send_message", (data) => {
@@ -37,4 +39,3 @@ app.listen(generalSetting.port, () => {
 // io.listen(generalSetting.socketServerPort, () => {
 //   console.log(`SERVER IS RUNNING ON PORT ${generalSetting.socketServerPort}`);
 // });
-io.listen(generalSetting.socketServerPort);

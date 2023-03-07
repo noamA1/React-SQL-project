@@ -29,9 +29,9 @@ const io = new Server(server, {
 //   console.log(`SERVER IS RUNNING ON PORT ${generalSetting.socketServerPort}`);
 // });
 
-io.on("connection", (data) => {
-  console.log(data);
-});
+// io.on("connection", (data) => {
+//   console.log(data);
+// });
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);

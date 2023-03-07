@@ -36,7 +36,7 @@ export const checkPassword = (enteredPassword, databasePassword) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/assets");
+    cb(null, "/public/assets");
     // cb(null, "http://localhost:3000/assets");
   },
   filename: (req, file, cb) => {

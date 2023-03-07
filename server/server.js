@@ -22,7 +22,7 @@ const io = new Server(server, {
 });
 
 // io.listen(generalSetting.socketServerPort);
-io.listen(generalSetting.socketServerPort, () => {
+io.listen(generalSetting.port, () => {
   console.log(`SERVER IS RUNNING ON PORT ${generalSetting.socketServerPort}`);
 });
 

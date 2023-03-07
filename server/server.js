@@ -12,7 +12,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
+const server = app.listen(generalSetting.port, () => {
+  console.log(`server is running on port ${generalSetting.port}`);
+});
 
 const io = new Server(server, {
   cors: {
@@ -39,9 +42,9 @@ io.on("connection", (socket) => {
 app.use("/", usersRouter);
 app.use("/", vacationsRouter);
 
-app.listen(generalSetting.port, () => {
-  console.log(`server is running on port ${generalSetting.port}`);
-});
+// app.listen(generalSetting.port, () => {
+//   console.log(`server is running on port ${generalSetting.port}`);
+// });
 
 // io.listen(generalSetting.socketServerPort, () => {
 //   console.log(`SERVER IS RUNNING ON PORT ${generalSetting.socketServerPort}`);

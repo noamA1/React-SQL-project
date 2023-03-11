@@ -135,25 +135,13 @@ vacationsRouter.delete(
 
 vacationsRouter.post(
   `${generalSetting.baseUrl}/vacation-image`,
-  // upload.single("file"),
+  upload.single("file"),
   (req, res) => {
-    console.log("req", req);
-    console.log("req.files", req.files);
-    const file = req.files.file;
-
-    file.mv(`${__dirname}/client/public/uploads/${file.name}`, (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-
-      res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
-    });
-    // console.log(upload);
-    // // res.json({ url: `${upload.getDestination}` + upload.getFilename });
-    // res
-    //   .status(200)
-    //   .send({ url: `${upload.getDestination}` + upload.getFilename });
+    console.log(upload);
+    // res.json({ url: `${upload.getDestination}` + upload.getFilename });
+    res
+      .status(200)
+      .send({ url: `${upload.getDestination}` + upload.getFilename });
   }
 );
 

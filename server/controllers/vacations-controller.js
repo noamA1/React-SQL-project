@@ -137,6 +137,8 @@ vacationsRouter.post(
   `${generalSetting.baseUrl}/vacation-image`,
   // upload.single("file"),
   (req, res) => {
+    console.log("req", req);
+    console.log("req.files", req.files);
     const file = req.files.file;
 
     file.mv(`${__dirname}/client/public/uploads/${file.name}`, (err) => {

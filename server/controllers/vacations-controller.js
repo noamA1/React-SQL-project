@@ -138,7 +138,9 @@ vacationsRouter.post(
   // upload.single("file"),
   upload.single("file"),
   (req, res) => {
-    console.log(upload);
+    // console.log(upload);
+    console.log("File uploaded:", req.file.path);
+    console.log("File name:", upload.getFilename());
     // res.json({ url: `${upload.getDestination}` + upload.getFilename });
     res
       .status(200)

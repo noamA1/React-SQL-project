@@ -140,11 +140,12 @@ vacationsRouter.post(
   (req, res) => {
     // console.log(upload);
     console.log("File uploaded:", req.file.path);
-    console.log("File name:", upload.getFilename());
+    console.log("File name:", upload.getFilename);
     // res.json({ url: `${upload.getDestination}` + upload.getFilename });
     res
       .status(200)
-      .send({ url: `${upload.getDestination}` + upload.getFilename });
+      // .send({ url: `${upload.getDestination}` + upload.getFilename });
+      .json({ url: `${req.file.path}` });
   }
 );
 

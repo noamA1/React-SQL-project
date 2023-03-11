@@ -135,7 +135,8 @@ vacationsRouter.delete(
 
 vacationsRouter.post(
   `${generalSetting.baseUrl}/vacation-image`,
-  upload.single("file"),
+  // upload.single("file"),
+  upload.single("image"),
   (req, res) => {
     console.log(upload);
     // res.json({ url: `${upload.getDestination}` + upload.getFilename });

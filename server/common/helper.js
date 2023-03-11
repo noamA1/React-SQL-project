@@ -44,5 +44,6 @@ const storage = multer.diskStorage({
   },
 });
 
-export const upload = multer({ dest: "uploads/" });
+// export const upload = multer({ dest: "uploads/" });
+export const upload = multer({ dest: "http://localhost:3000/public/uploads/" });
 // export const upload = multer({ storage });
